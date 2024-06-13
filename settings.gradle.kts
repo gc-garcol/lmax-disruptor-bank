@@ -8,7 +8,15 @@ plugins {
 }
 include(
     "bank-libs:common",
-    "bank-core",
-    "bank-app"
+    "bank-libs:bank-cluster-proto"
+)
+include(
+    "bank-cluster-core",
+    "bank-cluster"
+)
+include(
+    "bank-client-core",
+    "bank-client-app-admin",
+    "bank-client-app-user"
 )
 rootProject.name = "lmax-disruptor-bank"

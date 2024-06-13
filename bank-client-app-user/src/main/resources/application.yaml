@@ -1,0 +1,4 @@
+spring.application.name: user-app
+server.port: 8950
+---
+spring.threads.virtual.enabled: true
