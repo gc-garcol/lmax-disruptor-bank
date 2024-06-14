@@ -1,0 +1,16 @@
+[versions]
+springBoot = "3.3.0"
+springDependencyManagement = "1.1.5"
+slf4jVersion = "2.0.9"
+logbackVersion = "1.4.14"
+kafkaClientVersion = "3.7.0"
+lmaxDisruptorVersion = "4.0.0"
+agronaVersion = "1.21.2"
+
+[libraries]
+springBootStarter = { group = "org.springframework.boot", name = "spring-boot-starter" , version.ref = "springBoot"}
+slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4jVersion" }
+logback = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logbackVersion" }
+kafkaClient = { group = "org.apache.kafka", name = "kafka-clients", version.ref = "kafkaClientVersion" }
+lmaxDisruptor = { group = "com.lmax", name = "disruptor", version.ref = "lmaxDisruptorVersion" }
+agrona = { group = "org.agrona", name = "agrona", version.ref = "agronaVersion" }

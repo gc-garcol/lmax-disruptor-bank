@@ -1,0 +1,4 @@
+spring.application.name: admin-app
+server.port: 8900
+---
+spring.threads.virtual.enabled: true
