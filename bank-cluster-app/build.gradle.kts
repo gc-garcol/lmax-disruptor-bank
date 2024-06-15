@@ -40,3 +40,24 @@ sourceSets {
         java.srcDirs("src/main/java", generatedDir)
     }
 }
+
+tasks {
+    task("run-leader", JavaExec::class) {
+        group = "run"
+        classpath = sourceSets.main.get().runtimeClasspath
+        mainClass.set("gc.garcol.bankcluster.BankClusterApplication")
+        jvmArgs("-Dspring.profiles.active=leader")
+    }
+    task("run-follower", JavaExec::class) {
+        group = "run"
+        classpath = sourceSets.main.get().runtimeClasspath
+        mainClass.set("gc.garcol.bankcluster.BankClusterApplication")
+        jvmArgs("-Dspring.profiles.active=leader")
+    }
+    task("run-learner", JavaExec::class) {
+        group = "run"
+        classpath = sourceSets.main.get().runtimeClasspath
+        mainClass.set("gc.garcol.bankcluster.BankClusterApplication")
+        jvmArgs("-Dspring.profiles.active=leader")
+    }
+}

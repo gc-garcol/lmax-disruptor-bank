@@ -8,3 +8,15 @@ setup-dev: ## Setup development environment
 
 down-dev: ## Down development environment
 	docker-compose -f docker-infra.yml down -v
+
+build: ## Build jar
+	./gradlew clean build
+
+run-leader: ## Run leader
+	./gradlew :bank-cluster-app:run-leader
+
+run-follower: ## Run follower
+	./gradlew :bank-cluster-app:run-follower
+
+run-learner: ## Run learner
+	./gradlew :bank-cluster-app:run-learner

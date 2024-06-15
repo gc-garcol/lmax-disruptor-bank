@@ -1,4 +1,5 @@
 spring.application.name: follower-node-1
+server.port: 8805
 ---
 
 cluster:

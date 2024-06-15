@@ -1,4 +1,5 @@
 spring.application.name: leader-node
+server.port: 8800
 ---
 cluster:
   kafka:

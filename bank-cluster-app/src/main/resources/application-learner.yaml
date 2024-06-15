@@ -1,4 +1,5 @@
 spring.application.name: learner-node
+server.port: 8810
 ---
 cluster:
   kafka:
