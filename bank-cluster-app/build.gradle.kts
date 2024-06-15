@@ -52,12 +52,12 @@ tasks {
         group = "run"
         classpath = sourceSets.main.get().runtimeClasspath
         mainClass.set("gc.garcol.bankcluster.BankClusterApplication")
-        jvmArgs("-Dspring.profiles.active=leader")
+        jvmArgs("-Dspring.profiles.active=follower")
     }
     task("run-learner", JavaExec::class) {
         group = "run"
         classpath = sourceSets.main.get().runtimeClasspath
         mainClass.set("gc.garcol.bankcluster.BankClusterApplication")
-        jvmArgs("-Dspring.profiles.active=leader")
+        jvmArgs("-Dspring.profiles.active=learner")
     }
 }
