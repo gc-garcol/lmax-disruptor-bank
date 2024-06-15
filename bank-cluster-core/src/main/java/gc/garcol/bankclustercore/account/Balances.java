@@ -12,39 +12,51 @@ import java.util.List;
  */
 public class Balances {
     private final Long2ObjectHashMap<Balance> balances = new Long2ObjectHashMap<>();
+    private final Long2ObjectHashMap<Balance> changedBalances = new Long2ObjectHashMap<>();
 
     @Getter
     @Setter
     private long lastedId = 0;
 
-    public List<Balance> getBalances() {
-        return balances.values().stream().toList();
+    @Getter
+    @Setter
+    private boolean enableChangedCapture = false;
+
+    public List<Balance> getChangedBalances() {
+        return changedBalances.values().stream().toList();
+    }
+
+    public void clearChangedBalances() {
+        changedBalances.clear();
     }
 
     public long newBalance() {
         lastedId++;
-        balances.put(lastedId, Balance.builder()
-                .id(lastedId)
-                .active(true)
-                .amount(0)
-                .precision(2)
-            .build());
+        balances.put(lastedId, new Balance(lastedId, 0, 2, true));
+
+        if (enableChangedCapture) {
+            changedBalances.put(lastedId, new Balance(lastedId, 0, 2, true));
+        }
         return lastedId;
     }
 
     public void deposit(long id, long amount) {
         balances.get(id).increase(amount);
+        captureBalance(id);
     }
 
     public void withdraw(long id, long amount) {
         balances.get(id).decrease(amount);
+        captureBalance(id);
     }
 
     public void transfer(long fromId, long toId, long amount) {
         withdraw(fromId, amount);
         deposit(toId, amount);
+        captureBalance(fromId);
+        captureBalance(toId);
     }
-    
+
     public void putBalance(Balance balance) {
         balances.put(balance.getId(), balance);
     }
@@ -53,11 +65,13 @@ public class Balances {
         return balances.get(id);
     }
 
-    public void disableBalance(long id) {
-        balances.get(id).inactive();
-    }
-
-    public void enableBalance(long id) {
-        balances.get(id).active();
+    private void captureBalance(long id) {
+        if (enableChangedCapture) {
+            var balance = balances.get(id);
+            changedBalances.put(
+                lastedId,
+                new Balance(balance.getId(), balance.getAmount(), balance.getPrecision(), balance.isActive())
+            );
+        }
     }
 }

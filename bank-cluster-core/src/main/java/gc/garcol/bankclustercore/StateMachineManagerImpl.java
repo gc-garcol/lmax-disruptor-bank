@@ -89,8 +89,9 @@ public class StateMachineManagerImpl implements StateMachineManager {
                 throw new BankException("Cannot take snapshot when status is not ACTIVE");
             }
             snapshotRepository.persistLastOffset(offset.currentLastOffset());
-            accountRepository.persistBalances(balances.getBalances());
+            accountRepository.persistBalances(balances.getChangedBalances());
             accountRepository.persistLastId(balances.getLastedId());
+            balances.clearChangedBalances();
             log.info("Took snapshot to offset: {}", offset.currentLastOffset());
         });
     }
