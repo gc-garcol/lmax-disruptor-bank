@@ -1,0 +1,10 @@
+spring.application.name: follower-node-1
+---
+
+cluster:
+  kafka:
+    groupId: command-log-follower-group-1
+
+spring.datasource:
+  username: reader
+  password: reader

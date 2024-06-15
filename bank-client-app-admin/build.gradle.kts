@@ -14,14 +14,16 @@ configurations {
 }
 
 dependencies {
+    implementation(libs.slf4j)
+    implementation(libs.logback)
+    implementation(libs.lmaxDisruptor)
     implementation(project(":bank-libs:common"))
     implementation(project(":bank-libs:bank-cluster-proto"))
     implementation(project(":bank-client-core"))
     implementation("org.springframework.boot:spring-boot-starter-web")
-    compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    annotationProcessor("org.projectlombok:lombok")
-    implementation("com.lmax:disruptor:4.0.0")
+    compileOnly("org.projectlombok:lombok:${libs.versions.lombokVersion.get()}")
+    annotationProcessor("org.projectlombok:lombok:${libs.versions.lombokVersion.get()}")
 }
 
 @Suppress("DEPRECATION")
@@ -29,7 +31,7 @@ val generatedDir = file("${buildDir}/generated/src/main/java")
 val codecGeneration = configurations.create("codecGeneration")
 
 application {
-    mainClass.set("gc.garcol.bankapp.BankApplication")
+    mainClass.set("gc.garcol.bankclientappadmin.BankClientAdminApplication")
 }
 
 sourceSets {

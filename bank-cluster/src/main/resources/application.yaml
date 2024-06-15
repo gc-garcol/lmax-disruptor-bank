@@ -1,4 +1,8 @@
-spring.application.name: total-ordering-external-queue
 server.port: 8800
 ---
 spring.threads.virtual.enabled: true
+
+---
+spring.profiles.include:
+  - common-kafka
+  - common-database

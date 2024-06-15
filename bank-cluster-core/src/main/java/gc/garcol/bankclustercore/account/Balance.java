@@ -1,9 +1,19 @@
 package gc.garcol.bankclustercore.account;
 
 import gc.garcol.common.exception.Bank4xxException;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * @author thaivc
+ * @since 2024
+ */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Balance {
     private long id;
     private long amount;

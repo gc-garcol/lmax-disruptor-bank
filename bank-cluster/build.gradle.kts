@@ -14,15 +14,17 @@ configurations {
 }
 
 dependencies {
+    implementation(libs.lmaxDisruptor)
     implementation(libs.kafkaClient)
     implementation(project(":bank-libs:common"))
     implementation(project(":bank-libs:bank-cluster-proto"))
     implementation(project(":bank-cluster-core"))
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation(libs.mysqlConnector)
     compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
-    implementation("com.lmax:disruptor:4.0.0")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 }
 
 @Suppress("DEPRECATION")
@@ -30,7 +32,7 @@ val generatedDir = file("${buildDir}/generated/src/main/java")
 val codecGeneration = configurations.create("codecGeneration")
 
 application {
-    mainClass.set("gc.garcol.bankapp.BankApplication")
+    mainClass.set("gc.garcol.bankcluster.BankClusterApplication")
 }
 
 sourceSets {

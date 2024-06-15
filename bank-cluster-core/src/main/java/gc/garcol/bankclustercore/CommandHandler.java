@@ -1,7 +1,11 @@
 package gc.garcol.bankclustercore;
 
+/**
+ * @author thaivc
+ * @since 2024
+ */
 public interface CommandHandler {
 
-    void onCommand(BaseCommand command);
+    BaseResult onCommand(BaseCommand command);
 
 }

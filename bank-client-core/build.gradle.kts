@@ -3,11 +3,12 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.slf4j)
+    implementation(libs.logback)
+    implementation(libs.lmaxDisruptor)
     implementation(project(":bank-libs:common"))
-    compileOnly("org.projectlombok:lombok:1.18.32")
-    annotationProcessor("org.projectlombok:lombok:1.18.32")
-    implementation("com.lmax:disruptor:4.0.0")
-    implementation("org.agrona:agrona:1.21.2")
+    compileOnly("org.projectlombok:lombok:${libs.versions.lombokVersion.get()}")
+    annotationProcessor("org.projectlombok:lombok:${libs.versions.lombokVersion.get()}")
 }
 
 @Suppress("DEPRECATION")

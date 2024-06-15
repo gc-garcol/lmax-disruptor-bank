@@ -1,0 +1,9 @@
+spring.application.name: leader-node
+---
+cluster:
+  kafka:
+    groupId: command-log-leader-group
+
+spring.datasource:
+  username: reader
+  password: reader

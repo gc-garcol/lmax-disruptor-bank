@@ -2,6 +2,10 @@ package gc.garcol.bankclustercore.cluster;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * @author thaivc
+ * @since 2024
+ */
 public enum ClusterStatus {
     NOT_AVAILABLE,
     ACTIVE;

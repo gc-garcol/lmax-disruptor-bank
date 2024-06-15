@@ -2,10 +2,10 @@ package gc.garcol.bankclustercore;
 
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
-import java.util.List;
-
+/**
+ * @author thaivc
+ * @since 2024
+ */
 public interface CommandLogConsumerProvider {
-
-    KafkaConsumer<String, List<BaseCommand>> initConsumer(String topic, String groupId);
-
+    KafkaConsumer<String, byte[]> initConsumer(CommandLogKafkaProperties properties);
 }

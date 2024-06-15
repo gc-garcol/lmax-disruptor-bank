@@ -1,16 +1,20 @@
 package gc.garcol.bankcluster.transport;
 
-import gc.garcol.bankclustercore.BaseResponse;
+import gc.garcol.bankclustercore.BaseResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author thaivc
+ * @since 2024
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseErrorResponse extends BaseResponse {
+public class BaseErrorResult extends BaseResult {
     private String message;
     private int code;
 }

@@ -1,0 +1,9 @@
+spring.application.name: learner-node
+---
+cluster:
+  kafka:
+    groupId: command-log-learner-group
+
+spring.datasource:
+  username: root
+  password: root

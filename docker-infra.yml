@@ -1,5 +1,5 @@
 version: "3.7"
-name: redpanda-quickstart-one-broker
+name: dev-infra
 networks:
   redpanda_network:
     driver: bridge
@@ -30,7 +30,7 @@ services:
       - --smp 1
       - --default-log-level=info
     image: docker.redpanda.com/redpandadata/redpanda:v24.1.7
-    container_name: redpanda-0
+    container_name: redpanda
     volumes:
       - redpanda-0:/var/lib/redpanda/data
     networks:
