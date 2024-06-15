@@ -12,7 +12,7 @@ include(
 )
 include(
     "bank-cluster-core",
-    "bank-cluster"
+    "bank-cluster-app"
 )
 include(
     "bank-client-core",
