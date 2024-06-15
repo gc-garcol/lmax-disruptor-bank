@@ -1,6 +1,7 @@
 package gc.garcol.bankcluster.infra.adapter;
 
 import gc.garcol.bankclustercore.offset.SnapshotRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -8,7 +9,10 @@ import org.springframework.stereotype.Component;
  * @since 2024
  */
 @Component
+@RequiredArgsConstructor
 public class SnapshotRepositoryAdapter implements SnapshotRepository {
+
+
     @Override
     public Long getLastOffset() {
         return null;
