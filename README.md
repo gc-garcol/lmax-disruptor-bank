@@ -8,7 +8,14 @@ A simple high performance bank application
 - `Protobuf`
 
 ## Architecture
+### High-level design
 ![high level design](./docs/bank-app-v1.0.0.png)
+
+### Cluster structure
+![cluster-ddd.png](./docs/cluster-ddd.png)
+
+- [X] cluster-core: domain logic.
+- [X] cluster-app: framework layer.
 
 ## Project structure
 - `cluster-core`: Domain logic.
