@@ -63,20 +63,20 @@ public class StateMachineManagerImpl implements StateMachineManager {
         }
         status = StateMachineStatus.REPLAYING_LOGS;
 
-        var consumer = commandLogConsumerProvider.initConsumer(commandLogKafkaProperties);
-        for (;;) {
-            var commandLogsRecords = consumer.poll(Duration.ofMillis(1));
-            if (commandLogsRecords.isEmpty()) break;
-            for (var commandLogsRecord : commandLogsRecords) {
-                BalanceProto.CommandLogs
-                    .parseFrom(commandLogsRecord.value())
-                    .getLogsList()
-                    .forEach(commandLog -> commandHandler.onCommand(new BaseCommand(commandLog)));
-                offset.setOffset(commandLogsRecord.offset());
+        try (var consumer = commandLogConsumerProvider.initConsumer(commandLogKafkaProperties)) {
+            for (;;) {
+                var commandLogsRecords = consumer.poll(Duration.ofMillis(1));
+                if (commandLogsRecords.isEmpty()) break;
+                for (var commandLogsRecord : commandLogsRecords) {
+                    BalanceProto.CommandLogs
+                        .parseFrom(commandLogsRecord.value())
+                        .getLogsList()
+                        .forEach(commandLog -> commandHandler.onCommand(new BaseCommand(commandLog)));
+                    offset.setOffset(commandLogsRecord.offset());
+                }
             }
+            status = StateMachineStatus.REPLAYED_LOGS;
         }
-        status = StateMachineStatus.REPLAYED_LOGS;
-        consumer.close();
 
         status = StateMachineStatus.ACTIVE;
         log.info("Replayed logs from offset: {}", offset.currentLastOffset());
