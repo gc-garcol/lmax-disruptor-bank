@@ -13,4 +13,11 @@ public class CommandBufferEvent implements BufferEvent {
 
     private BaseCommand command;
     private BaseResult result;
+
+    public void copy(CommandBufferEvent event) {
+        this.replyChannel = event.replyChannel;
+        this.correlationId = event.correlationId;
+        this.command = event.command;
+        this.result = event.result;
+    }
 }
