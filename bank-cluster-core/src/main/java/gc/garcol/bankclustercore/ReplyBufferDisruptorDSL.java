@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class ReplyBufferDisruptorDSL implements DisruptorDSL<ReplyBufferEvent> {
-    private ReplyBufferHandler replyBufferHandler;
+    private final ReplyBufferHandler replyBufferHandler;
 
     @Override
     public Disruptor<ReplyBufferEvent> build(int bufferSize, WaitStrategy waitStrategy) {

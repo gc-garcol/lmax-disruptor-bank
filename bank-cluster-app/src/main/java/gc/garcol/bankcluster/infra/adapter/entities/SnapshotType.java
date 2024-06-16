@@ -9,8 +9,8 @@ import lombok.Getter;
 @Getter
 public enum SnapshotType {
 
-    BALANCE("LAST_KAFKA_OFFSET"),
-    LAST_ID("LAST_BALANCE_ID");
+    LAST_KAFKA_OFFSET("LAST_KAFKA_OFFSET"),
+    LAST_BALANCE_ID("LAST_BALANCE_ID");
 
     private final String type;
 

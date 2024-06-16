@@ -1,8 +1,9 @@
 package gc.garcol.bankclustercore.cluster;
 
-import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
-import gc.garcol.bankclustercore.*;
+import gc.garcol.bankclustercore.CommandBufferEvent;
+import gc.garcol.bankclustercore.ReplyBufferEvent;
+import gc.garcol.bankclustercore.StateMachineManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,13 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 public class LeaderBootstrap implements ClusterBootstrap {
 
     private final StateMachineManager stateMachineManager;
-
-    private final CommandBufferDisruptorDSL commandBufferDisruptorDSL;
-    private final ReplyBufferDisruptorDSL replyBufferDisruptorDSL;
-    private final LeaderProperties leaderProperties;
-
-    private Disruptor<CommandBufferEvent> commandBufferDisruptor;
-    private Disruptor<ReplyBufferEvent> replyBufferEventDisruptor;
+    private final Disruptor<CommandBufferEvent> commandBufferDisruptor;
+    private final Disruptor<ReplyBufferEvent> replyBufferEventDisruptor;
 
     @Override
     public void onStart() {
@@ -49,20 +45,12 @@ public class LeaderBootstrap implements ClusterBootstrap {
 
     private void activeReplyChannel() {
         log.info("On starting reply-buffer channel");
-        replyBufferEventDisruptor = replyBufferDisruptorDSL.build(
-            leaderProperties.getReplyBufferSize(),
-            new YieldingWaitStrategy()
-        );
         replyBufferEventDisruptor.start();
         log.info("On started reply-buffer channel");
     }
 
     private void activeCommandChannel() {
         log.info("On starting command-buffer channel");
-        commandBufferDisruptor = commandBufferDisruptorDSL.build(
-            leaderProperties.getCommandBufferSize(),
-            new YieldingWaitStrategy()
-        );
         commandBufferDisruptor.start();
         log.info("On started command-buffer channel");
     }

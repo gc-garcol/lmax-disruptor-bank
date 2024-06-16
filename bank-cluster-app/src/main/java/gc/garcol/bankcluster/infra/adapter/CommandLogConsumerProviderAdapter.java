@@ -10,6 +10,7 @@ import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -29,6 +30,8 @@ public class CommandLogConsumerProviderAdapter implements CommandLogConsumerProv
         props.put(ConsumerConfig.GROUP_ID_CONFIG, properties.getGroupId());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
-        return new KafkaConsumer<>(props);
+        var consumer = new KafkaConsumer<String, byte[]>(props);
+        consumer.subscribe(List.of(properties.getTopic()));
+        return consumer;
     }
 }

@@ -39,11 +39,10 @@ public class AccountRepositoryAdapter implements AccountRepository {
 
     @Override
     public Long lastedId() {
-        return Long.parseLong(
-            snapshotRepositoryJpa.findById(SnapshotType.LAST_ID.getType())
-                .map(SnapshotEntity::getValue)
-                .orElse("0")
-        );
+        return snapshotRepositoryJpa.findById(SnapshotType.LAST_BALANCE_ID.getType())
+            .map(SnapshotEntity::getValue)
+            .map(Long::parseLong)
+            .orElse(0L);
     }
 
     @Override
@@ -78,6 +77,6 @@ public class AccountRepositoryAdapter implements AccountRepository {
 
     @Override
     public void persistLastId(Long id) {
-        snapshotRepositoryJpa.update(SnapshotType.LAST_ID.getType(), id.toString());
+        snapshotRepositoryJpa.update(SnapshotType.LAST_BALANCE_ID.getType(), id.toString());
     }
 }
