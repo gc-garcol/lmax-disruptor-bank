@@ -8,6 +8,20 @@ message Balance {
   uint64 amount = 2;
   uint32 precision = 3;
   bool active = 4;
+  string correlationId = 5;
+}
+
+message BaseResult {
+  uint32 code = 1;
+  string message = 2;
+  string correlationId = 3;
+}
+
+message BaseResponse {
+  oneof type {
+    Balance balance = 1;
+    BaseResult baseResult = 2;
+  }
 }
 
 message CreateBalanceCommand {
@@ -29,6 +43,15 @@ message TransferCommand {
   uint64 amount = 3;
 }
 
+message BalanceCommand {
+  oneof type {
+    CreateBalanceCommand createBalanceCommand = 1;
+    DepositCommand depositCommand = 2;
+    WithdrawCommand withdrawCommand = 3;
+    TransferCommand transferCommand = 4;
+  }
+}
+
 message CommandLog {
   oneof type {
     CreateBalanceCommand createBalanceCommand = 1;
@@ -40,4 +63,8 @@ message CommandLog {
 
 message CommandLogs {
   repeated CommandLog logs = 1;
+}
+
+service BalanceService {
+  rpc sendCommand(stream BalanceCommand) returns (stream BaseResponse);
 }

@@ -52,7 +52,7 @@ public class StateMachineManagerImpl implements StateMachineManager {
         offset.setOffset(Optional.ofNullable(snapshotRepository.getLastOffset()).orElse(-1L));
 
         status = StateMachineStatus.LOADED_SNAPSHOT;
-        log.info("Loaded snapshot with offset: {}", offset.currentLastOffset());
+        log.info("Loaded snapshot with offset: {}, lastedId: {}", offset.currentLastOffset(), balances.getLastedId());
     }
 
     @SneakyThrows
