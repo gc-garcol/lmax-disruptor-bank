@@ -43,3 +43,5 @@ ghz --insecure --proto ./bank-libs/bank-cluster-proto/src/main/proto/balance.pro
 -c 200 -n 100000 \
 127.0.0.1:9500
 ```
+
+See [BENCHMARK](./README_benchmark.md) for more details.
