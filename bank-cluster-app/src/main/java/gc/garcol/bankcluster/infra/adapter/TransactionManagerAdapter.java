@@ -2,6 +2,7 @@ package gc.garcol.bankcluster.infra.adapter;
 
 import gc.garcol.bankclustercore.TransactionManager;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -12,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class TransactionManagerAdapter implements TransactionManager {
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void doInTransaction(Runnable runnable) {
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public void doInNewTransaction(Runnable runnable) {
         runnable.run();
     }
 }

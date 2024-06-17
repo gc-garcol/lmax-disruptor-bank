@@ -73,6 +73,7 @@ public class AccountRepositoryAdapter implements AccountRepository {
             SELECT id, amount, `precision`, active FROM temp_balances
             ON DUPLICATE KEY UPDATE amount = VALUES(amount), `precision` = VALUES(`precision`), active = VALUES(active);
         """).executeUpdate();
+        entityManager.createNativeQuery("DROP TEMPORARY TABLE temp_balances;").executeUpdate();
     }
 
     @Override

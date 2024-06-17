@@ -5,5 +5,5 @@ package gc.garcol.bankclustercore;
  * @since 2024
  */
 public interface TransactionManager {
-    void doInTransaction(Runnable runnable);
+    void doInNewTransaction(Runnable runnable);
 }

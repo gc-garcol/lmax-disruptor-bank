@@ -5,6 +5,7 @@ import gc.garcol.bankcluster.infra.SimpleReplier;
 import gc.garcol.bankclustercore.ReplyBufferEvent;
 import gc.garcol.bankclustercore.ReplyBufferEventDispatcher;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
  * @author thaivc
  * @since 2024
  */
+@Profile({"leader", "follower"})
 @Component
 @RequiredArgsConstructor
 public class ReplyBufferEventDispatcherAdapter implements ReplyBufferEventDispatcher {

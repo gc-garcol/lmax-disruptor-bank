@@ -22,4 +22,6 @@ public interface StateMachineManager {
 
     void takeSnapshot();
 
+    void active();
+
 }

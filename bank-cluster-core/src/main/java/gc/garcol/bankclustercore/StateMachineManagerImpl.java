@@ -91,7 +91,7 @@ public class StateMachineManagerImpl implements StateMachineManager {
 
     @Override
     public void takeSnapshot() {
-        transactionManager.doInTransaction(() -> {
+        transactionManager.doInNewTransaction(() -> {
             if (status != StateMachineStatus.ACTIVE) {
                 throw new BankException("Cannot take snapshot when status is not ACTIVE");
             }
@@ -101,5 +101,10 @@ public class StateMachineManagerImpl implements StateMachineManager {
             balances.clearChangedBalances();
             log.info("Took snapshot to offset: {}", offset.currentLastOffset());
         });
+    }
+
+    @Override
+    public void active() {
+        status = StateMachineStatus.ACTIVE;
     }
 }

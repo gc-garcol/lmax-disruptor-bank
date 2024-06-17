@@ -38,7 +38,8 @@ public class FollowerBootstrap implements ClusterBootstrap {
     }
 
     private void loadingStateMachine() {
-        stateMachineManager.loadingStateMachine();
+        stateMachineManager.reloadSnapshot();
+        stateMachineManager.active();
     }
 
     private void activeReplayChannel() {
