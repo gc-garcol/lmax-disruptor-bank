@@ -1,10 +1,7 @@
 package gc.garcol.bankcluster.transport;
 
 import gc.garcol.bankclustercore.BaseResult;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author thaivc

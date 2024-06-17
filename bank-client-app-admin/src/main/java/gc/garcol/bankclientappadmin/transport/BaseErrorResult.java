@@ -1,6 +1,5 @@
-package gc.garcol.bankclustercore.account;
+package gc.garcol.bankclientappadmin.transport;
 
-import gc.garcol.bankclustercore.BaseResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,10 +10,10 @@ import lombok.NoArgsConstructor;
  * @since 2024
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor(staticName = "of")
 @EqualsAndHashCode(callSuper = false)
-public class BalanceResult extends BaseResult {
+@AllArgsConstructor
+@NoArgsConstructor
+public class BaseErrorResult {
     private String message;
     private int code;
 }

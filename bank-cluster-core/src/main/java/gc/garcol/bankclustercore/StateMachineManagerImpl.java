@@ -10,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.TopicPartition;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -50,9 +52,10 @@ public class StateMachineManagerImpl implements StateMachineManager {
         accountRepository.balances().forEach(balances::putBalance);
         balances.setLastedId(Optional.ofNullable(accountRepository.lastedId()).orElse(0L));
         offset.setOffset(Optional.ofNullable(snapshotRepository.getLastOffset()).orElse(-1L));
+        commandLogKafkaProperties.setNextOffset(offset.nextOffset());
 
         status = StateMachineStatus.LOADED_SNAPSHOT;
-        log.info("Loaded snapshot with offset: {}", offset.currentLastOffset());
+        log.info("Loaded snapshot with offset: {}, lastedId: {}", offset.currentLastOffset(), balances.getLastedId());
     }
 
     @SneakyThrows
@@ -64,8 +67,11 @@ public class StateMachineManagerImpl implements StateMachineManager {
         status = StateMachineStatus.REPLAYING_LOGS;
 
         try (var consumer = commandLogConsumerProvider.initConsumer(commandLogKafkaProperties)) {
+            var partition = new TopicPartition(commandLogKafkaProperties.getTopic(), 0);
+            consumer.assign(List.of(partition));
+            consumer.seek(partition, offset.nextOffset());
             for (;;) {
-                var commandLogsRecords = consumer.poll(Duration.ofMillis(1));
+                var commandLogsRecords = consumer.poll(Duration.ofMillis(100));
                 if (commandLogsRecords.isEmpty()) break;
                 for (var commandLogsRecord : commandLogsRecords) {
                     BalanceProto.CommandLogs
@@ -75,11 +81,12 @@ public class StateMachineManagerImpl implements StateMachineManager {
                     offset.setOffset(commandLogsRecord.offset());
                 }
             }
+            consumer.commitSync();
             status = StateMachineStatus.REPLAYED_LOGS;
         }
 
         status = StateMachineStatus.ACTIVE;
-        log.info("Replayed logs from offset: {}", offset.currentLastOffset());
+        log.info("Replayed logs from offset: {}", offset.nextOffset());
     }
 
     @Override

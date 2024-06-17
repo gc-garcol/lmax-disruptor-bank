@@ -7,7 +7,9 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 /**
  * @author thaivc
@@ -16,13 +18,15 @@ import java.util.Deque;
 @RequiredArgsConstructor
 public class CommandBufferJournalerImpl implements CommandBufferJournaler {
 
+    private static final int COMMAND_LOG_CHUNK_SIZE = 100;
+
     private final KafkaProducer<String, byte[]> producer;
     private final CommandLogKafkaProperties commandLogKafkaProperties;
 
-    private Deque<BalanceProto.CommandLogs> buffers = new ArrayDeque<>();
+    private Deque<List<BalanceProto.CommandLog>> buffers = new ArrayDeque<>();
 
     {
-        buffers.addLast(BalanceProto.CommandLogs.newBuilder().build());
+        buffers.add(new ArrayList<>(COMMAND_LOG_CHUNK_SIZE));
     }
 
     @Override
@@ -34,18 +38,21 @@ public class CommandBufferJournalerImpl implements CommandBufferJournaler {
     }
 
     private void pushToBuffers(CommandBufferEvent event) {
-        if (buffers.getLast().getLogsList().size() == ClusterConstraint.COMMAND_LOG_CHUNK_SIZE) {
-            buffers.addLast(BalanceProto.CommandLogs.newBuilder().build());
+        if (buffers.getLast().size() == ClusterConstraint.COMMAND_LOG_CHUNK_SIZE) {
+            buffers.addLast(new ArrayList<>(COMMAND_LOG_CHUNK_SIZE));
         }
-        buffers.getLast().getLogsList().add(event.getCommand().getCommandLog());
+        buffers.getLast().add(event.getCommand().getCommandLog());
     }
 
     @SneakyThrows
     private void journalCommandLogs() {
-        for (BalanceProto.CommandLogs buffer : buffers) {
-            producer.send(new ProducerRecord<>(commandLogKafkaProperties.getTopic(), buffer.toByteArray())).get();
+        for (List<BalanceProto.CommandLog> commandLogs : buffers) {
+            var commandLogsMessage = BalanceProto.CommandLogs.newBuilder()
+                .addAllLogs(commandLogs)
+                .build();
+            producer.send(new ProducerRecord<>(commandLogKafkaProperties.getTopic(), commandLogsMessage.toByteArray())).get();
         }
         buffers.clear();
-        buffers.addLast(BalanceProto.CommandLogs.newBuilder().build());
+        buffers.add(new ArrayList<>(COMMAND_LOG_CHUNK_SIZE));
     }
 }

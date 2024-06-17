@@ -26,3 +26,20 @@ A simple high performance bank application
 ```shell
 make help
 ```
+
+## FAQ
+### How to test grpc endpoint?
+In order to test grpc server, you can use portman to send message like this
+
+![grpc-query.png](docs/examples/grpc-query.png)
+
+### How to benchmark grpc server?
+We use `ghz`([link](https://github.com/bojand/ghz)) as a benchmarking and load testing tool.
+
+```shell
+ghz --insecure --proto ./bank-libs/bank-cluster-proto/src/main/proto/balance.proto \
+--call gc.garcol.bank.proto.BalanceQueryService/sendQuery \
+-d '{"balanceFilterQuery": {"id": 1,"correlationId": "random-uuid"}}' \
+-c 200 -n 100000 \
+127.0.0.1:9500
+```
