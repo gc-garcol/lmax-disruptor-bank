@@ -2,6 +2,10 @@ spring.application.name: follower-node-1
 server.port: 8805
 ---
 
+server:
+  grpc:
+    port: 9510
+
 cluster:
   kafka:
     groupId: command-log-follower-group-1

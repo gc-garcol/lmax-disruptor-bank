@@ -14,7 +14,7 @@ message Balance {
 message BaseResult {
   uint32 code = 1;
   string message = 2;
-  string correlationId = 3;
+  optional string correlationId = 3;
 }
 
 message BaseResponse {
@@ -25,22 +25,26 @@ message BaseResponse {
 }
 
 message CreateBalanceCommand {
+  string correlationId = 1;
 }
 
 message DepositCommand {
   uint64 id = 1;
   uint64 amount = 2;
+  string correlationId = 3;
 }
 
 message WithdrawCommand {
   uint64 id = 1;
   uint64 amount = 2;
+  string correlationId = 3;
 }
 
 message TransferCommand {
   uint64 fromId = 1;
   uint64 toId = 2;
   uint64 amount = 3;
+  string correlationId = 4;
 }
 
 message BalanceCommand {
@@ -49,6 +53,24 @@ message BalanceCommand {
     DepositCommand depositCommand = 2;
     WithdrawCommand withdrawCommand = 3;
     TransferCommand transferCommand = 4;
+  }
+}
+
+message BalanceFilterQuery {
+  uint64 id = 1;
+  string correlationId = 2;
+}
+
+message BalanceQuery {
+  oneof type {
+      BalanceFilterQuery balanceFilterQuery = 1;
+  }
+}
+
+message BalanceQueryResult {
+  oneof type {
+    Balance balance = 1;
+    BaseResult baseResult = 2;
   }
 }
 
@@ -65,6 +87,11 @@ message CommandLogs {
   repeated CommandLog logs = 1;
 }
 
-service BalanceService {
-  rpc sendCommand(stream BalanceCommand) returns (stream BaseResponse);
+service BalanceCommandService {
+  rpc sendCommand(stream BalanceCommand) returns (stream BaseResult);
 }
+
+service BalanceQueryService {
+  rpc sendQuery(stream BalanceQuery) returns (stream BalanceQueryResult);
+}
+

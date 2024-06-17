@@ -1,6 +1,11 @@
 spring.application.name: leader-node
 server.port: 8800
 ---
+
+server:
+  grpc:
+    port: 9500
+
 cluster:
   kafka:
     groupId: command-log-leader-group

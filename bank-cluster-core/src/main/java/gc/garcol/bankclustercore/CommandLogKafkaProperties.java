@@ -10,4 +10,5 @@ import lombok.Data;
 public class CommandLogKafkaProperties {
     private String topic;
     private String groupId;
+    private long nextOffset;
 }

@@ -10,7 +10,6 @@ import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -27,11 +26,12 @@ public class CommandLogConsumerProviderAdapter implements CommandLogConsumerProv
     public KafkaConsumer<String, byte[]> initConsumer(CommandLogKafkaProperties properties) {
         var props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, clusterKafkaConfig.getBootstrapServers());
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, properties.getGroupId());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
-        var consumer = new KafkaConsumer<String, byte[]>(props);
-        consumer.subscribe(List.of(properties.getTopic()));
-        return consumer;
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, properties.getGroupId());
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1_000);
+        return new KafkaConsumer<>(props);
     }
 }

@@ -87,11 +87,6 @@ public class LeaderConfiguration {
     }
 
     @Bean
-    ReplyBufferEventDispatcher replyBufferEventDispatcher() {
-        return new ReplyBufferEventDispatcherImpl();
-    }
-
-    @Bean
     CommandBufferReply commandBufferReply(ReplyBufferEventDispatcher replyBufferEventDispatcher) {
         return new CommandBufferReplyImpl(replyBufferEventDispatcher);
     }
@@ -99,6 +94,11 @@ public class LeaderConfiguration {
     @Bean
     Disruptor<CommandBufferEvent> commandBufferDisruptor(CommandBufferJournaler commandBufferJournaler, CommandBufferHandler commandBufferHandler, CommandBufferReply commandBufferReply) {
         return new CommandBufferDisruptorDSL(commandBufferJournaler, commandBufferHandler, commandBufferReply).build(1 << 15, new YieldingWaitStrategy());
+    }
+
+    @Bean
+    CommandBufferEventDispatcher commandBufferEventDispatcher(Disruptor<CommandBufferEvent> commandBufferEventDisruptor) {
+        return new CommandBufferEventDispatcherImpl(commandBufferEventDisruptor);
     }
 
     @Bean
