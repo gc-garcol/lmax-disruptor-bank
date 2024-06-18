@@ -11,10 +11,10 @@ A simple high performance bank application
 ## Features
 
 ### Cluster core features
-- Journaling command logs.
-- Replaying command logs.
-- Snapshotting state machine.
-- Providing domain logic.
+- [X] Journaling command logs.
+- [X] Replaying command logs.
+- [X] Snapshotting state machine.
+- [X] Processing domain logic.
 
 ### Business features
 - `Admin`:
