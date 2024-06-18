@@ -14,4 +14,9 @@ import lombok.*;
 public class BaseErrorResult extends BaseResult {
     private String message;
     private int code;
+
+    @Override
+    public String toString() {
+        return String.format("{\"code\": %s,\"message\": \"%s\"}", code, message);
+    }
 }

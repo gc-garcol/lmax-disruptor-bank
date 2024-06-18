@@ -1,10 +1,7 @@
 package gc.garcol.bankclustercore.account;
 
 import gc.garcol.bankclustercore.BaseResult;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author thaivc
@@ -17,4 +14,9 @@ import lombok.NoArgsConstructor;
 public class BalanceResult extends BaseResult {
     private String message;
     private int code;
+
+    @Override
+    public String toString() {
+        return String.format("{\"code\": %s,\"message\": \"%s\"}", code, message);
+    }
 }
