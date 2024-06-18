@@ -13,6 +13,7 @@ protocVersion = "4.27.1"
 annotationsApiVersion = "6.0.53"
 protobufPluginVersion = "0.9.4"
 mysqlVersion = "8.4.0"
+jmhVersion = "1.37"
 
 [libraries]
 springBootStarter = { group = "org.springframework.boot", name = "spring-boot-starter" , version.ref = "springBoot"}
@@ -23,3 +24,5 @@ lmaxDisruptor = { group = "com.lmax", name = "disruptor", version.ref = "lmaxDis
 agrona = { group = "org.agrona", name = "agrona", version.ref = "agronaVersion" }
 protobufJava = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobufJavaVersion" }
 mysqlConnector = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysqlVersion" }
+jmhCore = { group = "org.openjdk.jmh", name = "jmh-core", version.ref = "jmhVersion" }
+jmhGeneratorAnnprocess = { group = "org.openjdk.jmh", name = "jmh-generator-annprocess", version.ref = "jmhVersion" }
