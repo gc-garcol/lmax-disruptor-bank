@@ -43,6 +43,18 @@ public class BalanceCommandGrpc extends BalanceCommandServiceGrpc.BalanceCommand
                 }
                 try {
                     switch (balanceCommand.getTypeCase()) {
+                        case CREATEBALANCECOMMAND -> {
+                            commandBufferEventDispatcher.dispatch(
+                                new CommandBufferEvent(
+                                    replyChannel,
+                                    balanceCommand.getCreateBalanceCommand().getCorrelationId(),
+                                    new BaseCommand(BalanceProto.CommandLog.newBuilder()
+                                        .setCreateBalanceCommand(balanceCommand.getCreateBalanceCommand())
+                                        .build()
+                                    )
+                                )
+                            );
+                        }
                         case DEPOSITCOMMAND ->
                             commandBufferEventDispatcher.dispatch(
                                 new CommandBufferEvent(
