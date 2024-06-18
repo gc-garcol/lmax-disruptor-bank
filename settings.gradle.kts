@@ -15,8 +15,7 @@ include(
     "bank-cluster-app"
 )
 include(
-    "bank-client-core",
-    "bank-client-app-admin",
-    "bank-client-app-user"
+    "bank-client-app-user",
+    "bank-client-app-admin"
 )
 rootProject.name = "lmax-disruptor-bank"

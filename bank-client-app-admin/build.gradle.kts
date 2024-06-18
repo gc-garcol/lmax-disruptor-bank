@@ -19,7 +19,6 @@ dependencies {
     implementation(libs.lmaxDisruptor)
     implementation(project(":bank-libs:common"))
     implementation(project(":bank-libs:bank-cluster-proto"))
-    implementation(project(":bank-client-core"))
     implementation("org.springframework.boot:spring-boot-starter-web")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     compileOnly("org.projectlombok:lombok:${libs.versions.lombokVersion.get()}")
@@ -28,7 +27,6 @@ dependencies {
 
 @Suppress("DEPRECATION")
 val generatedDir = file("${buildDir}/generated/src/main/java")
-val codecGeneration = configurations.create("codecGeneration")
 
 application {
     mainClass.set("gc.garcol.bankclientappadmin.BankClientAdminApplication")
@@ -37,5 +35,13 @@ application {
 sourceSets {
     main {
         java.srcDirs("src/main/java", generatedDir)
+    }
+}
+
+tasks {
+    task("run-admin", JavaExec::class) {
+        group = "run"
+        classpath = sourceSets.main.get().runtimeClasspath
+        mainClass.set("gc.garcol.bankclientappadmin.BankClientAdminApplication")
     }
 }

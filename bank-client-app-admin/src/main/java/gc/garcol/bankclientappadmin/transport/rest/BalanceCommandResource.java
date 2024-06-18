@@ -7,6 +7,7 @@ import gc.garcol.bankclientappadmin.transport.rest.payload.WithdrawCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
@@ -16,7 +17,8 @@ import java.util.concurrent.CompletableFuture;
  * @since 2024
  */
 @Slf4j
-@RestController("/api/v1/balance")
+@RestController
+@RequestMapping("/api/v1/balance/command")
 public class BalanceCommandResource {
 
     @PostMapping("/create")

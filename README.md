@@ -24,9 +24,8 @@ A simple high performance bank application
 
 ## Project structure
 - `cluster-core`: Domain logic.
-- `cluster`: Implements `cluster-core` and provides transport-layer (ex: grpc), framework-layer.
-- `client-core`: Provides interfaces for communicating with `clusters`, provides transport-layer (ex: grpc),
-- `client`: Implements `client-core` and provides framework-layer.
+- `cluster-app`: Implements `cluster-core` and provides transport-layer (ex: grpc), framework-layer.
+- `client`: Interacts with `cluster-app`, providers `api-resource`.
 
 ## Show helps
 ```shell

@@ -20,3 +20,9 @@ run-follower: ## Run follower
 
 run-learner: ## Run learner
 	./gradlew :bank-cluster-app:run-learner
+
+run-admin: ## Run admin app
+	./gradlew :bank-client-app-admin:run-admin
+
+run-user: ## Run user app
+	./gradlew :bank-client-app-admin:run-user
