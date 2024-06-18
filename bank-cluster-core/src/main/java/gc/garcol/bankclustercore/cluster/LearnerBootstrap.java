@@ -25,7 +25,6 @@ public class LearnerBootstrap implements ClusterBootstrap {
     private final Disruptor<ReplayBufferEvent> replayBufferEventDisruptor;
     private final CommandLogConsumerProvider commandLogConsumerProvider;
     private final Offset offset;
-    private final CommandHandler commandHandler;
     private final ReplayBufferEventDispatcher replayBufferEventDispatcher;
 
     @Setter

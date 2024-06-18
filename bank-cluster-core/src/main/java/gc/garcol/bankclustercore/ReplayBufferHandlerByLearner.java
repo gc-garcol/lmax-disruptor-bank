@@ -22,11 +22,16 @@ public class ReplayBufferHandlerByLearner implements ReplayBufferHandler {
 
     @Override
     public void onEvent(ReplayBufferEvent event, long sequence, boolean endOfBatch) throws Exception {
-        commandHandler.onCommand(event.getCommand());
-        eventCount--;
-        if (endOfBatch && shouldSnapshot()) {
+        if (event.getCommand() instanceof BaseCommandSnapshot) {
             stateMachineManager.takeSnapshot();
             resetAfterSnapshot();
+        } else {
+            commandHandler.onCommand(event.getCommand());
+            eventCount--;
+            if (endOfBatch && shouldSnapshot()) {
+                stateMachineManager.takeSnapshot();
+                resetAfterSnapshot();
+            }
         }
     }
 
