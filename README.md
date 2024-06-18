@@ -7,6 +7,11 @@ A simple high performance bank application
 - `Kafka`
 - `Protobuf`
 
+## Features
+- Journaling command logs.
+- Replaying command logs.
+- Snapshotting state machine.
+
 ## Architecture
 ### High-level design
 ![high level design](./docs/bank-app-v1.0.0.png)
@@ -22,6 +27,7 @@ A simple high performance bank application
 - `cluster`: Implements `cluster-core` and provides transport-layer (ex: grpc), framework-layer.
 - `client-core`: Provides interfaces for communicating with `clusters`, provides transport-layer (ex: grpc),
 - `client`: Implements `client-core` and provides framework-layer.
+
 ## Show helps
 ```shell
 make help
