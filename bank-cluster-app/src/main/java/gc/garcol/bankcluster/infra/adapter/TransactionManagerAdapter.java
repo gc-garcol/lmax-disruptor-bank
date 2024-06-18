@@ -2,7 +2,6 @@ package gc.garcol.bankcluster.infra.adapter;
 
 import gc.garcol.bankcluster.infra.EntityManagerContextHolder;
 import gc.garcol.bankclustercore.TransactionManager;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class TransactionManagerAdapter implements TransactionManager<EntityManager> {
+public class TransactionManagerAdapter implements TransactionManager {
 
     private final EntityManagerFactory entityManagerFactory;
 
