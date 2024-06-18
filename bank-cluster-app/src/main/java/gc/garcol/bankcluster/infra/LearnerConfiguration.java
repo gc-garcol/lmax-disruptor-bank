@@ -86,7 +86,6 @@ public class LearnerConfiguration {
         Disruptor<ReplayBufferEvent> replayBufferEventDisruptor,
         CommandLogConsumerProvider commandLogConsumerProvider,
         Offset offset,
-        CommandHandler commandHandler,
         CommandLogKafkaProperties commandLogKafkaProperties,
         ReplayBufferEventDispatcher replayBufferEventDispatcher
     ) {
@@ -95,7 +94,6 @@ public class LearnerConfiguration {
             replayBufferEventDisruptor,
             commandLogConsumerProvider,
             offset,
-            commandHandler,
             replayBufferEventDispatcher
         );
         learnerBootstrap.setCommandLogKafkaProperties(commandLogKafkaProperties);

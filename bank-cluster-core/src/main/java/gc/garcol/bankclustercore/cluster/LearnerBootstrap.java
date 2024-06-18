@@ -27,6 +27,8 @@ public class LearnerBootstrap implements ClusterBootstrap {
     private final Offset offset;
     private final ReplayBufferEventDispatcher replayBufferEventDispatcher;
 
+    private static final int MAX_SNAPSHOT_CHECK_CIRCLES = 1_000;
+
     @Setter
     private CommandLogKafkaProperties commandLogKafkaProperties;
 
@@ -64,23 +66,36 @@ public class LearnerBootstrap implements ClusterBootstrap {
     @SneakyThrows
     private void startReplayMessage() {
         log.info("Start replay message");
-
-        try (var consumer = commandLogConsumerProvider.initConsumer(commandLogKafkaProperties)) {
-            var partition = new TopicPartition(commandLogKafkaProperties.getTopic(), 0);
-            consumer.assign(List.of(partition));
-            consumer.seek(partition, offset.nextOffset());
-            for (;;) {
-                var commandLogsRecords = consumer.poll(Duration.ofMillis(100));
-                for (var commandLogsRecord : commandLogsRecords) {
-                    BalanceProto.CommandLogs
-                        .parseFrom(commandLogsRecord.value())
-                        .getLogsList()
-                        .forEach(commandLog -> replayBufferEventDispatcher.dispatch(new ReplayBufferEvent(new BaseCommand(commandLog))));
-                    offset.setOffset(commandLogsRecord.offset());
+        new Thread(() -> {
+            try (var consumer = commandLogConsumerProvider.initConsumer(commandLogKafkaProperties)) {
+                var partition = new TopicPartition(commandLogKafkaProperties.getTopic(), 0);
+                consumer.assign(List.of(partition));
+                consumer.seek(partition, offset.nextOffset());
+                int count = MAX_SNAPSHOT_CHECK_CIRCLES;
+                for (;;) {
+                    var commandLogsRecords = consumer.poll(Duration.ofMillis(100));
+                    if (commandLogsRecords.isEmpty()) {
+                        count--;
+                        if (count < 0) {
+                            replayBufferEventDispatcher.dispatch(new ReplayBufferEvent(new BaseCommandSnapshot()));
+                            count = MAX_SNAPSHOT_CHECK_CIRCLES;
+                        }
+                        continue;
+                    }
+                    for (var commandLogsRecord : commandLogsRecords) {
+                        BalanceProto.CommandLogs
+                            .parseFrom(commandLogsRecord.value())
+                            .getLogsList()
+                            .forEach(commandLog -> replayBufferEventDispatcher.dispatch(new ReplayBufferEvent(new BaseCommand(commandLog))));
+                        offset.setOffset(commandLogsRecord.offset());
+                    }
+                    consumer.commitSync();
                 }
-                consumer.commitSync();
+            } catch (Exception e) {
+                log.error("Replay message failed", e);
+                System.exit(-9);
             }
-        }
+        }).start();
     }
 
     private void activeCLuster() {
