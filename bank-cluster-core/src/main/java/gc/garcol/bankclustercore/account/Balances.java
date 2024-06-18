@@ -68,10 +68,7 @@ public class Balances {
     private void captureBalance(long id) {
         if (enableChangedCapture) {
             var balance = balances.get(id);
-            changedBalances.put(
-                lastedId,
-                new Balance(balance.getId(), balance.getAmount(), balance.getPrecision(), balance.isActive())
-            );
+            changedBalances.put(id, new Balance(balance.getId(), balance.getAmount(), balance.getPrecision(), balance.isActive()));
         }
     }
 }

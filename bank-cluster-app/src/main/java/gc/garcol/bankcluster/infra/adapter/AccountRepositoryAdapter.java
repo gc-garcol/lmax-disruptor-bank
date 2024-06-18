@@ -1,13 +1,12 @@
 package gc.garcol.bankcluster.infra.adapter;
 
+import gc.garcol.bankcluster.infra.EntityManagerContextHolder;
 import gc.garcol.bankcluster.infra.adapter.entities.SnapshotEntity;
 import gc.garcol.bankcluster.infra.adapter.entities.SnapshotType;
 import gc.garcol.bankclustercore.account.AccountRepository;
 import gc.garcol.bankclustercore.account.Balance;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +22,6 @@ public class AccountRepositoryAdapter implements AccountRepository {
 
     private final AccountRepositoryJpa accountRepositoryJpa;
     private final SnapshotRepositoryJpa snapshotRepositoryJpa;
-    private final EntityManager entityManager;
 
     @Override
     public Stream<Balance> balances() {
@@ -46,12 +44,11 @@ public class AccountRepositoryAdapter implements AccountRepository {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void persistBalances(List<Balance> balances) {
         if (balances == null || balances.isEmpty()) {
             return;
         }
-
+        var entityManager = EntityManagerContextHolder.CONTEXT.get();
         entityManager.createNativeQuery("""
             CREATE TEMPORARY TABLE temp_balances
             (
@@ -78,6 +75,10 @@ public class AccountRepositoryAdapter implements AccountRepository {
 
     @Override
     public void persistLastId(Long id) {
-        snapshotRepositoryJpa.update(SnapshotType.LAST_BALANCE_ID.getType(), id.toString());
+        var entityManager = EntityManagerContextHolder.CONTEXT.get();
+        entityManager.createQuery("UPDATE SnapshotEntity s SET s.value = :value WHERE s.id = :id")
+            .setParameter("value", id.toString())
+            .setParameter("id", SnapshotType.LAST_BALANCE_ID.getType())
+            .executeUpdate();
     }
 }

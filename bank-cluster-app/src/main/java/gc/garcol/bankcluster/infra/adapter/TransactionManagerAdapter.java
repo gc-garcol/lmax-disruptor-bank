@@ -1,20 +1,41 @@
 package gc.garcol.bankcluster.infra.adapter;
 
+import gc.garcol.bankcluster.infra.EntityManagerContextHolder;
 import gc.garcol.bankclustercore.TransactionManager;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author thaivc
  * @since 2024
  */
 @Component
-public class TransactionManagerAdapter implements TransactionManager {
+@RequiredArgsConstructor
+public class TransactionManagerAdapter implements TransactionManager<EntityManager> {
+
+    private final EntityManagerFactory entityManagerFactory;
 
     @Override
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void doInNewTransaction(Runnable runnable) {
-        runnable.run();
+        var entityManager = entityManagerFactory.createEntityManager();
+        EntityManagerContextHolder.CONTEXT.set(entityManager);
+        var transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            runnable.run();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw e;
+        } finally {
+            if (entityManager.isOpen()) {
+                entityManager.close();
+            }
+            EntityManagerContextHolder.CONTEXT.remove();
+        }
     }
 }

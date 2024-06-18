@@ -1,5 +1,6 @@
 package gc.garcol.bankcluster.infra.adapter;
 
+import gc.garcol.bankcluster.infra.EntityManagerContextHolder;
 import gc.garcol.bankcluster.infra.adapter.entities.SnapshotEntity;
 import gc.garcol.bankcluster.infra.adapter.entities.SnapshotType;
 import gc.garcol.bankclustercore.offset.SnapshotRepository;
@@ -26,6 +27,10 @@ public class SnapshotRepositoryAdapter implements SnapshotRepository {
 
     @Override
     public void persistLastOffset(long offset) {
-        snapshotRepositoryJpa.update(SnapshotType.LAST_KAFKA_OFFSET.getType(), String.valueOf(offset));
+        var entityManager = EntityManagerContextHolder.CONTEXT.get();
+        entityManager.createQuery("update SnapshotEntity s set s.value = :value where s.id = :id")
+            .setParameter("value", String.valueOf(offset))
+            .setParameter("id", SnapshotType.LAST_KAFKA_OFFSET.getType())
+            .executeUpdate();
     }
 }
