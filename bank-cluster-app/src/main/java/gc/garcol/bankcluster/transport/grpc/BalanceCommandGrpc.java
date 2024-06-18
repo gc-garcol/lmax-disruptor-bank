@@ -30,7 +30,8 @@ public class BalanceCommandGrpc extends BalanceCommandServiceGrpc.BalanceCommand
     @Override
     public StreamObserver<BalanceProto.BalanceCommand> sendCommand(StreamObserver<BalanceProto.BaseResult> responseObserver) {
         var replyChannel = UUID.randomUUID().toString();
-        var streamObserver = new StreamObserver<BalanceProto.BalanceCommand>() {
+        simpleReplier.repliers.put(replyChannel, responseObserver);
+        return new StreamObserver<>() {
             @Override
             public void onNext(BalanceProto.BalanceCommand balanceCommand) {
                 if (ClusterStatus.STATE.get().equals(ClusterStatus.NOT_AVAILABLE)) {
@@ -43,58 +44,52 @@ public class BalanceCommandGrpc extends BalanceCommandServiceGrpc.BalanceCommand
                 }
                 try {
                     switch (balanceCommand.getTypeCase()) {
-                        case CREATEBALANCECOMMAND -> {
-                            commandBufferEventDispatcher.dispatch(
-                                new CommandBufferEvent(
-                                    replyChannel,
-                                    balanceCommand.getCreateBalanceCommand().getCorrelationId(),
-                                    new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                                        .setCreateBalanceCommand(balanceCommand.getCreateBalanceCommand())
-                                        .build()
-                                    )
-                                )
-                            );
-                        }
-                        case DEPOSITCOMMAND ->
-                            commandBufferEventDispatcher.dispatch(
-                                new CommandBufferEvent(
-                                    replyChannel,
-                                    balanceCommand.getDepositCommand().getCorrelationId(),
-                                    new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                                        .setDepositCommand(balanceCommand.getDepositCommand())
-                                        .build()
-                                    )
-                                )
-                            );
-                        case WITHDRAWCOMMAND ->
-                            commandBufferEventDispatcher.dispatch(
-                                new CommandBufferEvent(
-                                    replyChannel,
-                                    balanceCommand.getWithdrawCommand().getCorrelationId(),
-                                    new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                                        .setWithdrawCommand(balanceCommand.getWithdrawCommand())
-                                        .build()
-                                    )
-                                )
-                            );
-                        case TRANSFERCOMMAND ->
-                            commandBufferEventDispatcher.dispatch(
-                                new CommandBufferEvent(
-                                    replyChannel,
-                                    balanceCommand.getTransferCommand().getCorrelationId(),
-                                    new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                                        .setTransferCommand(balanceCommand.getTransferCommand())
-                                        .build()
-                                    )
-                                )
-                            );
-                        default ->
-                            responseObserver.onNext(
-                                BalanceProto.BaseResult.newBuilder()
-                                    .setCode(400)
-                                    .setMessage("Invalid balance command")
+                        case CREATEBALANCECOMMAND -> commandBufferEventDispatcher.dispatch(
+                            new CommandBufferEvent(
+                                replyChannel,
+                                balanceCommand.getCreateBalanceCommand().getCorrelationId(),
+                                new BaseCommand(BalanceProto.CommandLog.newBuilder()
+                                    .setCreateBalanceCommand(balanceCommand.getCreateBalanceCommand())
                                     .build()
-                            );
+                                )
+                            )
+                        );
+                        case DEPOSITCOMMAND -> commandBufferEventDispatcher.dispatch(
+                            new CommandBufferEvent(
+                                replyChannel,
+                                balanceCommand.getDepositCommand().getCorrelationId(),
+                                new BaseCommand(BalanceProto.CommandLog.newBuilder()
+                                    .setDepositCommand(balanceCommand.getDepositCommand())
+                                    .build()
+                                )
+                            )
+                        );
+                        case WITHDRAWCOMMAND -> commandBufferEventDispatcher.dispatch(
+                            new CommandBufferEvent(
+                                replyChannel,
+                                balanceCommand.getWithdrawCommand().getCorrelationId(),
+                                new BaseCommand(BalanceProto.CommandLog.newBuilder()
+                                    .setWithdrawCommand(balanceCommand.getWithdrawCommand())
+                                    .build()
+                                )
+                            )
+                        );
+                        case TRANSFERCOMMAND -> commandBufferEventDispatcher.dispatch(
+                            new CommandBufferEvent(
+                                replyChannel,
+                                balanceCommand.getTransferCommand().getCorrelationId(),
+                                new BaseCommand(BalanceProto.CommandLog.newBuilder()
+                                    .setTransferCommand(balanceCommand.getTransferCommand())
+                                    .build()
+                                )
+                            )
+                        );
+                        default -> responseObserver.onNext(
+                            BalanceProto.BaseResult.newBuilder()
+                                .setCode(400)
+                                .setMessage("Invalid balance command")
+                                .build()
+                        );
                     }
                 } catch (Exception e) {
                     log.error("Failed to send command", e);
@@ -121,7 +116,5 @@ public class BalanceCommandGrpc extends BalanceCommandServiceGrpc.BalanceCommand
                 responseObserver.onCompleted();
             }
         };
-        simpleReplier.repliers.put(replyChannel, responseObserver);
-        return streamObserver;
     }
 }
