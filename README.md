@@ -5,12 +5,28 @@ A simple high performance bank application
 - `Java 21`
 - `Lmax Disruptor`
 - `Kafka`
-- `Protobuf`
+- `Protobuf` serde
+- `Grpc`
 
 ## Features
+
+### Cluster core features
 - Journaling command logs.
 - Replaying command logs.
 - Snapshotting state machine.
+- Providing domain logic.
+
+### Business features
+- `Admin`:
+  - [ ] Create balance.
+  - [ ] List all balances.
+  - [ ] Get balance by id.
+  - [ ] Update balance.
+- `User`:
+  - [ ] Get current balance.
+  - [ ] Deposit money.
+  - [ ] Withdraw money.
+  - [ ] Transfer money.
 
 ## Architecture
 ### High-level design
