@@ -23,7 +23,7 @@ public class BalanceCommandStub {
 
     private final BalanceCommandServiceGrpc.BalanceCommandServiceStub balanceCommandServiceStub;
 
-    private StreamObserver<BalanceProto.BalanceCommand> requestStreamObserver;
+    private volatile StreamObserver<BalanceProto.BalanceCommand> requestStreamObserver;
     private static final Map<String, CompletableFuture<BaseResponse>> replyFutures = new ConcurrentHashMap<>();
 
     public BalanceCommandStub(BalanceCommandServiceGrpc.BalanceCommandServiceStub balanceCommandServiceStub) {
@@ -104,6 +104,7 @@ public class BalanceCommandStub {
             public void onError(Throwable throwable) {
                 log.error("on error observer balance", throwable);
                 replyFutures.clear();
+                slientSleep(2_000);
                 initRequestStreamObserver();
             }
 
@@ -113,6 +114,12 @@ public class BalanceCommandStub {
                 replyFutures.clear();
             }
         };
+    }
+
+    private void slientSleep(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {}
     }
 
 }
