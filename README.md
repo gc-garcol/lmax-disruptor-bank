@@ -18,10 +18,12 @@ A simple high performance bank application
 
 ### Business features
 - `Admin`:
-  - [ ] Create balance.
+  - [X] Create balance.
+  - [X] Deposit money.
+  - [X] Withdraw money.
+  - [X] Transfer money.
   - [ ] List all balances.
   - [ ] Get balance by id.
-  - [ ] Update balance.
 - `User`:
   - [ ] Get current balance.
   - [ ] Deposit money.
