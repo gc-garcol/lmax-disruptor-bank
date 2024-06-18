@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Replace default implementation of ReplyBufferEventDispatcher
  *
@@ -23,11 +25,12 @@ public class ReplyBufferEventDispatcherAdapter implements ReplyBufferEventDispat
 
     @Override
     public void dispatch(ReplyBufferEvent event) {
-        simpleReplier.repliers.get(event.getReplyChannel()).onNext(
-            BalanceProto.BaseResult.newBuilder()
-                .setCorrelationId(event.getCorrelationId())
-                .setMessage(event.getResult().toString())
-                .build()
-        );
+        Optional.ofNullable(simpleReplier.repliers.get(event.getReplyChannel()))
+            .ifPresent(streamObserver -> streamObserver.onNext(
+                BalanceProto.BaseResult.newBuilder()
+                    .setCorrelationId(event.getCorrelationId())
+                    .setMessage(event.getResult().toString())
+                    .build()
+            ));
     }
 }
