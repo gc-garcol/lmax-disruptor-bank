@@ -8,6 +8,7 @@ import gc.garcol.bankclustercore.*;
 import gc.garcol.bankclustercore.account.AccountRepository;
 import gc.garcol.bankclustercore.account.Balances;
 import gc.garcol.bankclustercore.cluster.LeaderBootstrap;
+import gc.garcol.bankclustercore.cluster.LeaderProperties;
 import gc.garcol.bankclustercore.offset.Offset;
 import gc.garcol.bankclustercore.offset.SnapshotRepository;
 import jakarta.annotation.PreDestroy;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +40,15 @@ public class LeaderConfiguration {
     private final CommandLogProducerProvider commandLogProducerProvider;
 
     private LeaderBootstrap leaderBootstrap;
+
+    @Bean
+    LeaderProperties leaderProperties(
+        @Value("${leader.commandBufferPow}") int commandBufferPow,
+        @Value("${leader.replyBufferPow}") int replyBufferPow,
+        @Value("${leader.logsChunkSize}") int logsChunkSize
+    ) {
+        return new LeaderProperties(1 << commandBufferPow, 1 << replyBufferPow, logsChunkSize);
+    }
 
     @Bean
     CommandLogKafkaProperties commandLogKafkaProperties() {
@@ -77,8 +88,8 @@ public class LeaderConfiguration {
     }
 
     @Bean
-    CommandBufferJournaler commandBufferJournaler(KafkaProducer<String, byte[]> producer, CommandLogKafkaProperties commandLogKafkaProperties) {
-        return new CommandBufferJournalerImpl(producer, commandLogKafkaProperties);
+    CommandBufferJournaler commandBufferJournaler(KafkaProducer<String, byte[]> producer, CommandLogKafkaProperties commandLogKafkaProperties, LeaderProperties leaderProperties) {
+        return new CommandBufferJournalerImpl(producer, commandLogKafkaProperties, leaderProperties);
     }
 
     @Bean
@@ -92,8 +103,8 @@ public class LeaderConfiguration {
     }
 
     @Bean
-    Disruptor<CommandBufferEvent> commandBufferDisruptor(CommandBufferJournaler commandBufferJournaler, CommandBufferHandler commandBufferHandler, CommandBufferReply commandBufferReply) {
-        return new CommandBufferDisruptorDSL(commandBufferJournaler, commandBufferHandler, commandBufferReply).build(1 << 15, new YieldingWaitStrategy());
+    Disruptor<CommandBufferEvent> commandBufferDisruptor(CommandBufferJournaler commandBufferJournaler, CommandBufferHandler commandBufferHandler, CommandBufferReply commandBufferReply, LeaderProperties leaderProperties) {
+        return new CommandBufferDisruptorDSL(commandBufferJournaler, commandBufferHandler, commandBufferReply).build(leaderProperties.getCommandBufferSize(), new YieldingWaitStrategy());
     }
 
     @Bean
@@ -107,8 +118,8 @@ public class LeaderConfiguration {
     }
 
     @Bean
-    Disruptor<ReplyBufferEvent> replyBufferEventDisruptor(ReplyBufferHandler replyBufferHandler) {
-        return new ReplyBufferDisruptorDSL(replyBufferHandler).build(1 << 16, new YieldingWaitStrategy());
+    Disruptor<ReplyBufferEvent> replyBufferEventDisruptor(ReplyBufferHandler replyBufferHandler, LeaderProperties leaderProperties) {
+        return new ReplyBufferDisruptorDSL(replyBufferHandler).build(leaderProperties.getReplyBufferSize(), new YieldingWaitStrategy());
     }
 
     @Bean

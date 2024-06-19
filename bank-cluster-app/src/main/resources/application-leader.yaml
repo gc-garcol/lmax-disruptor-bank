@@ -13,3 +13,9 @@ cluster:
 spring.datasource:
   username: reader
   password: reader
+
+---
+leader:
+  commandBufferPow: 15
+  replyBufferPow: 16
+  logsChunkSize: 150
