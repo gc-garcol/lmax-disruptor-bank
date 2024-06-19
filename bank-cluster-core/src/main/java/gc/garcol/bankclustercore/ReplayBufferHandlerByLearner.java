@@ -1,8 +1,9 @@
 package gc.garcol.bankclustercore;
 
+import gc.garcol.bankclustercore.cluster.LearnerProperties;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-import java.time.Duration;
 import java.time.Instant;
 
 /**
@@ -11,13 +12,12 @@ import java.time.Instant;
  */
 @RequiredArgsConstructor
 public class ReplayBufferHandlerByLearner implements ReplayBufferHandler {
-    private static final Duration SNAPSHOT_INTERVAL = Duration.ofMinutes(5);
-    private static final int SNAPSHOT_SIZE = 10_000;
-
     private final CommandHandler commandHandler;
     private final StateMachineManager stateMachineManager;
+    private final LearnerProperties learnerProperties;
 
-    private int eventCount = SNAPSHOT_SIZE;
+    @Setter
+    private int eventCount;
     private Instant lastSnapshot = Instant.now();
 
     @Override
@@ -33,11 +33,11 @@ public class ReplayBufferHandlerByLearner implements ReplayBufferHandler {
     }
 
     private boolean shouldSnapshot() {
-        return eventCount < 0 || Instant.now().compareTo(lastSnapshot.plus(SNAPSHOT_INTERVAL)) > 0;
+        return eventCount < 0 || Instant.now().compareTo(lastSnapshot.plus(learnerProperties.getSnapshotLifeTime())) > 0;
     }
 
     private void resetAfterSnapshot() {
-        eventCount = SNAPSHOT_SIZE;
+        eventCount = learnerProperties.getSnapshotFragmentSize();
         lastSnapshot = Instant.now();
     }
 }

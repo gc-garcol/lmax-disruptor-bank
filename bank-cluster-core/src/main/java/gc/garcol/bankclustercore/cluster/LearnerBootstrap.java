@@ -26,8 +26,7 @@ public class LearnerBootstrap implements ClusterBootstrap {
     private final CommandLogConsumerProvider commandLogConsumerProvider;
     private final Offset offset;
     private final ReplayBufferEventDispatcher replayBufferEventDispatcher;
-
-    private static final int MAX_SNAPSHOT_CHECK_CIRCLES = 1_000;
+    private final LearnerProperties learnerProperties;
 
     @Setter
     private CommandLogKafkaProperties commandLogKafkaProperties;
@@ -71,14 +70,14 @@ public class LearnerBootstrap implements ClusterBootstrap {
                 var partition = new TopicPartition(commandLogKafkaProperties.getTopic(), 0);
                 consumer.assign(List.of(partition));
                 consumer.seek(partition, offset.nextOffset());
-                int count = MAX_SNAPSHOT_CHECK_CIRCLES;
-                for (;;) {
-                    var commandLogsRecords = consumer.poll(Duration.ofMillis(100));
+                int count = learnerProperties.getMaxSnapshotCheckCircles();
+                for (; ; ) {
+                    var commandLogsRecords = consumer.poll(Duration.ofMillis(learnerProperties.getPollingInterval()));
                     if (commandLogsRecords.isEmpty()) {
                         count--;
                         if (count < 0) {
                             replayBufferEventDispatcher.dispatch(new ReplayBufferEvent(new BaseCommandSnapshot()));
-                            count = MAX_SNAPSHOT_CHECK_CIRCLES;
+                            count = learnerProperties.getMaxSnapshotCheckCircles();
                         }
                         continue;
                     }

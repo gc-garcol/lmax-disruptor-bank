@@ -7,16 +7,20 @@ import gc.garcol.bankclustercore.*;
 import gc.garcol.bankclustercore.account.AccountRepository;
 import gc.garcol.bankclustercore.account.Balances;
 import gc.garcol.bankclustercore.cluster.LearnerBootstrap;
+import gc.garcol.bankclustercore.cluster.LearnerProperties;
 import gc.garcol.bankclustercore.offset.Offset;
 import gc.garcol.bankclustercore.offset.SnapshotRepository;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
+
+import java.time.Duration;
 
 /**
  * @author thaivc
@@ -71,8 +75,27 @@ public class LearnerConfiguration {
     }
 
     @Bean
-    ReplayBufferHandler replayBufferHandlerByLearner(CommandHandler commandHandler, StateMachineManager stateMachineManager) {
-        return new ReplayBufferHandlerByLearner(commandHandler, stateMachineManager);
+    LearnerProperties learnerProperties(
+        @Value("${learner.bufferSize}") int bufferSize,
+        @Value("${learner.pollInterval}") int pollInterval,
+        @Value("${learner.maxSnapshotCheckCircles}") int maxSnapshotCheckCircles,
+        @Value("${learner.snapshotFragmentSize}") int snapshotFragmentSize,
+        @Value("${learner.snapshotLifeTime}") int snapshotLifeTime
+    ) {
+        var learnerProperties = new LearnerProperties();
+        learnerProperties.setBufferSize(bufferSize);
+        learnerProperties.setPollingInterval(pollInterval);
+        learnerProperties.setMaxSnapshotCheckCircles(maxSnapshotCheckCircles);
+        learnerProperties.setSnapshotFragmentSize(snapshotFragmentSize);
+        learnerProperties.setSnapshotLifeTime(Duration.ofSeconds(snapshotLifeTime));
+        return learnerProperties;
+    }
+
+    @Bean
+    ReplayBufferHandler replayBufferHandlerByLearner(CommandHandler commandHandler, StateMachineManager stateMachineManager, LearnerProperties learnerProperties) {
+        var replayHandler = new ReplayBufferHandlerByLearner(commandHandler, stateMachineManager, learnerProperties);
+        replayHandler.setEventCount(learnerProperties.getBufferSize());
+        return replayHandler;
     }
 
     @Bean
@@ -87,14 +110,16 @@ public class LearnerConfiguration {
         CommandLogConsumerProvider commandLogConsumerProvider,
         Offset offset,
         CommandLogKafkaProperties commandLogKafkaProperties,
-        ReplayBufferEventDispatcher replayBufferEventDispatcher
+        ReplayBufferEventDispatcher replayBufferEventDispatcher,
+        LearnerProperties learnerProperties
     ) {
         learnerBootstrap = new LearnerBootstrap(
             stateMachineManager,
             replayBufferEventDisruptor,
             commandLogConsumerProvider,
             offset,
-            replayBufferEventDispatcher
+            replayBufferEventDispatcher,
+            learnerProperties
         );
         learnerBootstrap.setCommandLogKafkaProperties(commandLogKafkaProperties);
         return learnerBootstrap;

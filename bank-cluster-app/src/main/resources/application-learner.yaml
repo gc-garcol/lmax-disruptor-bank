@@ -8,3 +8,11 @@ cluster:
 spring.datasource:
   username: root
   password: root
+
+---
+learner:
+  bufferSize: 32
+  pollInterval: 100
+  maxSnapshotCheckCircles: 50
+  snapshotFragmentSize: 100_000
+  snapshotLifeTime: 3600
