@@ -13,9 +13,16 @@
 ![kafka-badge](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
 
 A simple high performance bank application using command sourcing.
-- Nearly `30.000` **write-requests** per second on a single `leader` node (running on a MacBook 13-inch, M1, 2020).
+- Nearly `30.000` **write-requests** per second on a single `leader` node.
+
+  Result of sending 100k deposit-request to `leader` (running on a MacBook Pro 13-inch, M1, 2020):
+
+  <img style="width: 400px; max-width: 100vw; border: 2px solid grey;" src="./docs/benchmark/simple-benchmark.png" alt="simple benchmark">
+
 - Linear scale out the `read` throughput by adding more `follower` nodes.
 
+**NOTE:** This project is slated for significant performance enhancements through the implementation of `Cap'n Proto` serialization (serde) and `Cap'n Proto RPC`, or alternatively, technologies such as `RSocket`.
+Benchmarking results will be updated accordingly to reflect these improvements in due course.
 ## Architecture
 ### High-level design
 ![high level design](./docs/bank-app-v1.0.0.png)
