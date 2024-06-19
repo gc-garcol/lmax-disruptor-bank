@@ -1,44 +1,72 @@
-# BANK-APP
-A simple high performance bank application
+# BANK APP <img src="https://img.shields.io/badge/version-1.0.0-blue.svg"/>
 
-## Technologies
-- `Java 21`
-- `Lmax Disruptor`
-- `Kafka`
-- `Protobuf` serde
-- `Grpc`
+<div>
+  <img style="display: inline-block" src="https://img.shields.io/badge/Replicated%20state%20machine-f38a3f.svg">
+  <img style="display: inline-block" src="https://img.shields.io/badge/Lmax%20disruptor-green.svg">
+  <img style="display: inline-block" src="https://img.shields.io/badge/Protobuf-yellow.svg">
+  <img style="display: inline-block" src="https://img.shields.io/badge/Grpc-red.svg">
+  <img style="display: inline-block" src="https://img.shields.io/badge/Microservice-blue.svg">
+</div>
+
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![spring-boot-badge](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![kafka-badge](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
+
+A simple high performance bank application using command sourcing.
+
+## Architecture
+### High-level design
+![high level design](./docs/bank-app-v1.0.0.png)
+
+- `cluster-app`:
+  - `leader` node: handles all incoming commands, queries.
+  - `follower` node: handles all incoming queries, replays command-logs published by `leader`.
+  - `learner` node: replays command-logs published by `leader`, takes snapshot of state-machine.
+
+- `client-app` interacts with `cluster-app` via `grpc` protocol, provides Restful Api. Including modules:
+  - `admin`
+  - `user`
+
+#### Leader core flow
+- All commands requested from client-apps are published into a inbound ring-buffer (command-buffer).
+- The commands are then streamed into disk (kafka - one partition) chunk by chunk.
+- The business-logic consumer then process all incoming commands in order to build `state-machine`.
+- Finally, the results are published into out-bound ringbuffer (reply-buffer) in order to reply back to `client-apps`.
+
+### Cluster structure
+![cluster-ddd.png](./docs/cluster-ddd.png)
+
+- `cluster-core`: domain logic.
+- `cluster-app`: framework & transport layer, implements `cluster-core`'s interface ports.
 
 ## Features
-
 ### Cluster core features
 - [X] Journaling command logs.
 - [X] Replaying command logs.
+- [X] Managing state machine.
 - [X] Snapshotting state machine.
 - [X] Processing domain logic.
+  - [X] Create balance.
+  - [X] Deposit money.
+  - [X] Withdraw money.
+  - [X] Transfer money.
+  - [X] Get balance by id.
+  - [ ] List all balances.
 
 ### Business features
-- `Admin`:
+- [ ] `Admin`:
   - [X] Create balance.
   - [X] Deposit money.
   - [X] Withdraw money.
   - [X] Transfer money.
   - [ ] List all balances.
   - [ ] Get balance by id.
-- `User`:
+
+- [ ] `User`:
   - [ ] Get current balance.
   - [ ] Deposit money.
   - [ ] Withdraw money.
   - [ ] Transfer money.
-
-## Architecture
-### High-level design
-![high level design](./docs/bank-app-v1.0.0.png)
-
-### Cluster structure
-![cluster-ddd.png](./docs/cluster-ddd.png)
-
-- [X] cluster-core: domain logic.
-- [X] cluster-app: framework layer.
 
 ## Project structure
 - `cluster-core`: Domain logic.
