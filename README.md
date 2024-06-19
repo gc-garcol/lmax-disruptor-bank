@@ -78,6 +78,38 @@ A simple high performance bank application using command sourcing.
 make help
 ```
 
+## Development
+
+- [X] Setup dev environment
+```shell
+make setup-dev
+```
+
+- [X] Start `leader` node
+```shell
+make run-leader
+```
+
+- [ ] Start `follower` node (Not available yet)
+```shell
+make run-leader
+```
+
+- [X] Start `learner` node
+```shell
+make run-learner
+```
+
+- [X] Start `admin` app
+```shell
+make run-admin
+```
+
+- [ ] Start `user` app (Not available yet)
+```shell
+make run-user
+```
+
 ## FAQ
 ### How to test grpc endpoint?
 In order to test grpc server, you can use portman to send message like this
