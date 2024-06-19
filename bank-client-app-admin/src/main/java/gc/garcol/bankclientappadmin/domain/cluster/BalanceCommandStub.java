@@ -96,7 +96,7 @@ public class BalanceCommandStub {
         return new StreamObserver<>() {
             @Override
             public void onNext(BalanceProto.BaseResult baseResult) {
-                Optional.ofNullable(replyFutures.get(baseResult.getCorrelationId()))
+                Optional.ofNullable(replyFutures.remove(baseResult.getCorrelationId()))
                     .ifPresent(future -> future.complete(new BaseResponse(baseResult.getCode(), baseResult.getMessage())));
             }
 
