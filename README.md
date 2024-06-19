@@ -13,6 +13,8 @@
 ![kafka-badge](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
 
 A simple high performance bank application using command sourcing.
+- Nearly `30.000` **write-requests** per second on a single `leader` node (running on a MacBook 13-inch, M1, 2020).
+- Linear scale out the `read` throughput by adding more `follower` nodes.
 
 ## Architecture
 ### High-level design
