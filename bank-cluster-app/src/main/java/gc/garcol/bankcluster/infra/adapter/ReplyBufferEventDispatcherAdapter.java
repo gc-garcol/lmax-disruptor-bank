@@ -25,7 +25,7 @@ public class ReplyBufferEventDispatcherAdapter implements ReplyBufferEventDispat
 
     @Override
     public void dispatch(ReplyBufferEvent event) {
-        Optional.ofNullable(simpleReplier.repliers.remove(event.getReplyChannel()))
+        Optional.ofNullable(simpleReplier.repliers.get(event.getReplyChannel()))
             .ifPresent(streamObserver -> streamObserver.onNext(
                 BalanceProto.BaseResult.newBuilder()
                     .setCorrelationId(event.getCorrelationId())
