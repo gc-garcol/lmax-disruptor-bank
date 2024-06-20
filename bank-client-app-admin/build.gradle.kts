@@ -52,4 +52,10 @@ tasks {
         classpath = sourceSets.main.get().runtimeClasspath
         mainClass.set("gc.garcol.bankclientappadmin.BankClientAdminApplication")
     }
+    task("run-benchmark-tool", JavaExec::class) {
+        group = "run"
+        classpath = sourceSets.main.get().runtimeClasspath
+        mainClass.set("gc.garcol.bankclientappadmin.BankClientAdminApplication")
+        jvmArgs("-Dspring.profiles.active=benchmark")
+    }
 }
