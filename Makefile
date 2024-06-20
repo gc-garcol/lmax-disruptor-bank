@@ -25,7 +25,7 @@ run-admin: ## Run admin app
 	./gradlew :bank-client-app-admin:run-admin
 
 run-benchmark-tool: ## Run benchmark tool
-	./gradlew :bank-client-app-admin:run-benchmark-tool
+	./gradlew :bank-cluster-benchmark:run-benchmark-tool
 
 run-user: ## Run user app
 	./gradlew :bank-client-app-admin:run-user

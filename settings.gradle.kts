@@ -14,6 +14,7 @@ include(
     "bank-cluster-core",
     "bank-cluster-app"
 )
+include("bank-cluster-benchmark")
 include(
     "bank-client-app-user",
     "bank-client-app-admin"

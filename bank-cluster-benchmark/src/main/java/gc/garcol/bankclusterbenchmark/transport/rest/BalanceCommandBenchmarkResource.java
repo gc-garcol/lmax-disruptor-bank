@@ -1,10 +1,9 @@
-package gc.garcol.bankclientappadmin.transport.rest;
+package gc.garcol.bankclusterbenchmark.transport.rest;
 
-import gc.garcol.bankclientappadmin.domain.cluster.BalanceCommandStub;
-import gc.garcol.bankclientappadmin.domain.cluster.commands.DepositCommand;
+import gc.garcol.bankclusterbenchmark.domain.cluster.BalanceCommandStub;
+import gc.garcol.bankclusterbenchmark.domain.cluster.commands.DepositCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,6 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Profile("benchmark")
 @RequestMapping("/api/balance-benchmark")
 public class BalanceCommandBenchmarkResource {
 
