@@ -1,4 +1,4 @@
-package gc.garcol.bankclusterbenchmark.domain.cluster.commands;
+package gc.garcol.benchmarkcluster.domain.cluster.commands;
 
 import lombok.Data;
 
@@ -9,8 +9,9 @@ import java.util.UUID;
  * @since 2024
  */
 @Data
-public class WithdrawCommand implements BalanceCommand {
+public class TransferCommand implements BalanceCommand {
     private final String correlationId = UUID.randomUUID().toString();
-    private Long id;
+    private Long fromId;
+    private Long toId;
     private Long amount;
 }

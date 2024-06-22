@@ -1,4 +1,4 @@
-package gc.garcol.bankclusterbenchmark.domain.cluster;
+package gc.garcol.benchmarkcluster.domain.cluster;
 
 import gc.garcol.bank.proto.BalanceCommandServiceGrpc;
 import io.grpc.ManagedChannelBuilder;

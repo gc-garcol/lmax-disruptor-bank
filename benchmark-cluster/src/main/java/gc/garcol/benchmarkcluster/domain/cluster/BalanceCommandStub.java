@@ -1,9 +1,9 @@
-package gc.garcol.bankclusterbenchmark.domain.cluster;
+package gc.garcol.benchmarkcluster.domain.cluster;
 
 import gc.garcol.bank.proto.BalanceCommandServiceGrpc;
 import gc.garcol.bank.proto.BalanceProto;
-import gc.garcol.bankclusterbenchmark.domain.cluster.commands.*;
-import gc.garcol.bankclusterbenchmark.transport.rest.BaseResponse;
+import gc.garcol.benchmarkcluster.domain.cluster.commands.*;
+import gc.garcol.benchmarkcluster.transport.rest.BaseResponse;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

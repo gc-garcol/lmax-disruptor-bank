@@ -1,4 +1,4 @@
-package gc.garcol.bankclusterbenchmark.transport.rest;
+package gc.garcol.benchmarkcluster.transport.rest;
 
 /**
  * @author thaivc

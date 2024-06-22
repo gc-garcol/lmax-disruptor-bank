@@ -1,4 +1,4 @@
-package gc.garcol.bankclusterbenchmark.domain.cluster.commands;
+package gc.garcol.benchmarkcluster.domain.cluster.commands;
 
 /**
  * @author thaivc

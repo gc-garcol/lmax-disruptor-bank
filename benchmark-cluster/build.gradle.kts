@@ -37,7 +37,7 @@ dependencies {
 val generatedDir = file("${buildDir}/generated/src/main/java")
 
 application {
-    mainClass.set("gc.garcol.bankclusterbenchmark.BankClusterBenchmarkApplication")
+    mainClass.set("gc.garcol.benchmarkcluster.BenchmarkClusterApplication")
 }
 
 sourceSets {
@@ -50,6 +50,6 @@ tasks {
     task("run-benchmark-tool", JavaExec::class) {
         group = "run"
         classpath = sourceSets.main.get().runtimeClasspath
-        mainClass.set("gc.garcol.bankclusterbenchmark.BankClusterBenchmarkApplication")
+        mainClass.set("gc.garcol.benchmarkcluster.BenchmarkClusterApplication")
     }
 }

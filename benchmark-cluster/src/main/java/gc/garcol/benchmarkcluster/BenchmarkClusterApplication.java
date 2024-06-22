@@ -1,12 +1,12 @@
-package gc.garcol.bankclusterbenchmark;
+package gc.garcol.benchmarkcluster;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BankClusterBenchmarkApplication {
+public class BenchmarkClusterApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BankClusterBenchmarkApplication.class, args);
+        SpringApplication.run(BenchmarkClusterApplication.class, args);
     }
 }
