@@ -14,5 +14,5 @@ learner:
   bufferSize: 32
   pollInterval: 100
   maxSnapshotCheckCircles: 50
-  snapshotFragmentSize: 1000
-  snapshotLifeTime: 10
+  snapshotFragmentSize: 100000
+  snapshotLifeTime: 20
