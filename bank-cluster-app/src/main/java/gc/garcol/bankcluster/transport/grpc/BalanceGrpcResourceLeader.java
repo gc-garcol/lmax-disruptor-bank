@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.Executors;
+
 /**
  * @author thaivc
  * @since 2024
@@ -38,6 +40,7 @@ public class BalanceGrpcResourceLeader {
             server = ServerBuilder.forPort(serverPort)
                 .addService(balanceQueryGrpc)
                 .addService(balanceCommandGrpc)
+                .executor(Executors.newVirtualThreadPerTaskExecutor())
                 .build();
             server.start();
         } catch (Exception e) {

@@ -17,6 +17,6 @@ public class BalanceResult extends BaseResult {
 
     @Override
     public String toString() {
-        return String.format("{\"code\": %s,\"message\": \"%s\"}", code, message);
+        return String.format("%s::%s", code, message);
     }
 }
