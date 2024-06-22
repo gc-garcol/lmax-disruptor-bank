@@ -16,6 +16,7 @@ include(
 )
 include("benchmark-cluster")
 include(
+    "bank-client-core",
     "bank-client-app-user",
     "bank-client-app-admin"
 )

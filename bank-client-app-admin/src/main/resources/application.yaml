@@ -8,3 +8,6 @@ cluster:
   leader:
     host: localhost
     port: 9500
+
+request-buffer:
+  pow: 16

@@ -131,13 +131,13 @@ public class LearnerConfiguration {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    void startLeader() {
+    void startLearner() {
         log.info("Bootstrapping learner");
         learnerBootstrap.onStart();
     }
 
     @PreDestroy
-    void stopLeader() {
+    void stopLearner() {
         log.info("Destroying learner");
         learnerBootstrap.onStop();
     }

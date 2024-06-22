@@ -16,12 +16,10 @@ configurations {
 dependencies {
     implementation(libs.slf4j)
     implementation(libs.logback)
+    implementation(libs.agrona)
     implementation(libs.lmaxDisruptor)
-    implementation(project(":bank-client-core"))
     implementation(project(":bank-libs:common"))
     implementation(project(":bank-libs:bank-cluster-proto"))
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     compileOnly("org.projectlombok:lombok:${libs.versions.lombokVersion.get()}")
     annotationProcessor("org.projectlombok:lombok:${libs.versions.lombokVersion.get()}")
 

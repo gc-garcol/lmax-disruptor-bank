@@ -1,7 +1,12 @@
 package gc.garcol.bankclientappadmin.transport.rest;
 
+import gc.garcol.bankclientappadmin.infra.query.BalanceDetailQuery;
+import gc.garcol.bankclientcore.cluster.BaseRequest;
+import gc.garcol.bankclientcore.cluster.BaseResponse;
+import gc.garcol.bankclientcore.cluster.RequestBufferDispatcher;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,12 +17,15 @@ import java.util.concurrent.CompletableFuture;
  * @since 2024
  */
 @Slf4j
-@RequestMapping("/api/v1/balance/query")
 @RestController
+@RequestMapping("/api/v1/balance/query")
+@RequiredArgsConstructor
 public class BalanceQueryResource {
 
-    @PostMapping("/current-balance")
-    public CompletableFuture<BaseResponse> currentBalance() {
-        return CompletableFuture.supplyAsync(() -> new BaseResponse(200, "Success"));
+    private final RequestBufferDispatcher<BaseRequest> requestBufferDispatcher;
+
+    @GetMapping
+    public CompletableFuture<BaseResponse> currentBalance(BalanceDetailQuery balanceDetailQuery) {
+        return requestBufferDispatcher.dispatch(balanceDetailQuery);
     }
 }

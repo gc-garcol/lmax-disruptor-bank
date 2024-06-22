@@ -1,10 +1,12 @@
 package gc.garcol.bankclientappadmin.transport.rest;
 
-import gc.garcol.bankclientappadmin.domain.cluster.BalanceCommandStub;
-import gc.garcol.bankclientappadmin.domain.cluster.commands.CreateBalanceCommand;
-import gc.garcol.bankclientappadmin.domain.cluster.commands.DepositCommand;
-import gc.garcol.bankclientappadmin.domain.cluster.commands.TransferCommand;
-import gc.garcol.bankclientappadmin.domain.cluster.commands.WithdrawCommand;
+import gc.garcol.bankclientappadmin.infra.command.CreateBalanceCommand;
+import gc.garcol.bankclientappadmin.infra.command.DepositCommand;
+import gc.garcol.bankclientappadmin.infra.command.TransferCommand;
+import gc.garcol.bankclientappadmin.infra.command.WithdrawCommand;
+import gc.garcol.bankclientcore.cluster.BaseRequest;
+import gc.garcol.bankclientcore.cluster.BaseResponse;
+import gc.garcol.bankclientcore.cluster.RequestBufferDispatcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,30 +26,30 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class BalanceCommandResource {
 
-    private final BalanceCommandStub balanceCommandStub;
+    private final RequestBufferDispatcher<BaseRequest> requestBufferDispatcher;
 
     @PostMapping("/create")
     public CompletableFuture<BaseResponse> create() {
         var command = new CreateBalanceCommand();
         log.info("Create balance command: {}", command);
-        return balanceCommandStub.sendCommand(command);
+        return requestBufferDispatcher.dispatch(command);
     }
 
     @PostMapping("/deposit")
     public CompletableFuture<BaseResponse> deposit(@RequestBody DepositCommand command) {
         log.info("Deposit command: {}", command);
-        return balanceCommandStub.sendCommand(command);
+        return requestBufferDispatcher.dispatch(command);
     }
 
     @PostMapping("/withdraw")
     public CompletableFuture<BaseResponse> withdraw(@RequestBody WithdrawCommand command) {
         log.info("Withdraw command: {}", command);
-        return balanceCommandStub.sendCommand(command);
+        return requestBufferDispatcher.dispatch(command);
     }
 
     @PostMapping("/transfer")
     public CompletableFuture<BaseResponse> transfer(@RequestBody TransferCommand command) {
         log.info("Transfer command: {}", command);
-        return balanceCommandStub.sendCommand(command);
+        return requestBufferDispatcher.dispatch(command);
     }
 }
