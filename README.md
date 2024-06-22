@@ -15,11 +15,11 @@
 A simple high performance bank application using command sourcing.
 - Process around `52.000` **write-requests** per second on a single `leader` node.
 
-  Result of sending 300k deposit-request to `leader` (running on a MacBook Pro 13-inch, M1, 2020):
+  Result of sending 500k deposit-requests to the `leader` (running on a MacBook Pro 13-inch, M1, 2020):
 
   <img style="width: 400px; max-width: 100vw; border: 2px solid grey;" src="./docs/benchmark/simple-benchmark.png" alt="simple benchmark">
 
-- Linear scale out the `read` throughput by adding more `follower` nodes.
+- By adding more the `follower` nodes, the `read` throughput can increase linearly, theoretically reaching `infinity`.
 
 **NOTE:** This project is slated for significant performance enhancements through the implementation of `Cap'n Proto` serialization (serde) and `Cap'n Proto RPC`, or alternatively, technologies such as `RSocket`.
 Benchmarking results will be updated accordingly to reflect these improvements in due course.
