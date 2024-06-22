@@ -23,9 +23,13 @@ A simple high performance bank application using command sourcing.
 
 **NOTE:** This project is slated for significant performance enhancements through the implementation of `Cap'n Proto` serialization (serde) and `Cap'n Proto RPC`, or alternatively, technologies such as `RSocket`.
 Benchmarking results will be updated accordingly to reflect these improvements in due course.
+
 ## Architecture
 ### High-level design
 ![high level design](./docs/bank-app-v1.0.0.png)
+
+The architecture resembles that of [Lmax Architecture](https://martinfowler.com/articles/lmax.html#:~:text=Figure%204%3A%20The%20LMAX%20architecture%20with%20the%20disruptors%20expanded), but in a simplified form.
+This is achieved by journaling `command logs` into Kafka and by omitting the use of the `replicator processor`.
 
 - `cluster-app`:
   - `leader` node: handles all incoming commands, queries.
