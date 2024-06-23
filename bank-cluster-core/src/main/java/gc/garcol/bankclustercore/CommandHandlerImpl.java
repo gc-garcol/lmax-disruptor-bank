@@ -41,8 +41,8 @@ public class CommandHandlerImpl implements CommandHandler {
     }
 
     private BalanceResult handle(BalanceProto.CreateBalanceCommand command) {
-        balances.newBalance();
-        return BalanceResult.of("Create balance success", 0);
+        long id = balances.newBalance();
+        return BalanceResult.of("Create balance success::" + id, 0);
     }
 
     private BalanceResult handle(BalanceProto.DepositCommand command) {

@@ -32,10 +32,11 @@ public class Balances {
         changedBalances.clear();
     }
 
-    public void newBalance() {
+    public long newBalance() {
         lastedId++;
         balances.put(lastedId, new Balance(lastedId, 0, 2, true));
         captureBalance(lastedId);
+        return lastedId;
     }
 
     public void deposit(long id, long amount) {
