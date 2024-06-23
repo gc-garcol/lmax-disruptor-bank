@@ -80,7 +80,7 @@ This is achieved by journaling `command logs` into Kafka and by omitting the use
   - [X] Withdraw money.
   - [X] Transfer money.
   - [ ] List all balances.
-  - [ ] Get balance by id.
+  - [X] Get balance by id.
 
 - [ ] `User`:
   - [ ] Get current balance.
