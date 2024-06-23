@@ -47,10 +47,17 @@ This is achieved by journaling `command logs` into Kafka and by omitting the use
 - Finally, the results are published into out-bound ringbuffer (reply-buffer) in order to reply back to `client-apps`.
 
 ### Cluster structure
+
+#### Cluster hexagonal architecture
 ![cluster-ddd.png](./docs/cluster-ddd.png)
 
 - `cluster-core`: domain logic.
 - `cluster-app`: framework & transport layer, implements `cluster-core`'s interface ports.
+
+#### Cluster core structure
+![cluster-core-structure.png](docs/cluster-core-structure.png)
+
+**Note**: All `producers`(or `dispatcher`) and `consumers`(or `processor`) interacting with the same `ring-buffer` are managed as children of a `buffer-channel`.
 
 ## Features
 ### Cluster core features
