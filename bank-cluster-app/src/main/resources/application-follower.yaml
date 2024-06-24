@@ -13,3 +13,8 @@ cluster:
 spring.datasource:
   username: reader
   password: reader
+
+---
+follower:
+  bufferSize: 1024
+  pollInterval: 100

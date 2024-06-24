@@ -64,6 +64,7 @@ This is achieved by journaling `command logs` into Kafka and by omitting the use
 - [X] Journaling command logs.
 - [X] Replaying command logs.
 - [X] Managing state machine.
+- [X] Replicating state machine.
 - [X] Snapshotting state machine.
 - [X] Processing domain logic.
   - [X] Create balance.
@@ -105,22 +106,22 @@ make help
 make setup-dev
 ```
 
-- [X] Start `leader` node
+- [X] Start `leader` node - processing read and write requests
 ```shell
 make run-leader
 ```
 
-- [ ] Start `follower` node (Not available yet)
+- [X] Start `follower` node - processing read requests
 ```shell
-make run-leader
+make run-follower
 ```
 
-- [X] Start `learner` node
+- [X] Start `learner` node - snapshotting state machine
 ```shell
 make run-learner
 ```
 
-- [X] Start `admin` app
+- [X] Start `admin` app - CRUD app
 ```shell
 make run-admin
 ```

@@ -16,7 +16,7 @@ import java.util.Optional;
  * @author thaivc
  * @since 2024
  */
-@Profile({"leader", "follower"})
+@Profile({"leader"})
 @Component
 @RequiredArgsConstructor
 public class ReplyBufferEventDispatcherAdapter implements ReplyBufferEventDispatcher {

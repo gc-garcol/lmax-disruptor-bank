@@ -11,7 +11,7 @@ spring.datasource:
 
 ---
 learner:
-  bufferSize: 32
+  bufferSize: 1024
   pollInterval: 100
   maxSnapshotCheckCircles: 50
   snapshotFragmentSize: 100000
