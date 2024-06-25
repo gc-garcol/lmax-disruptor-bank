@@ -42,7 +42,7 @@ This is achieved by journaling `command logs` into Kafka and by omitting the use
 
 #### Leader core flow
 - All commands requested from client-apps are published into a inbound ring-buffer (command-buffer).
-- The commands are then streamed into disk (kafka - one partition) chunk by chunk.
+- The commands are then grouped into chunks and then streamed into disk (kafka - one partition) when disruptor's `EventHandler` reaches `endOfBatch`.
 - The business-logic consumer then processes all incoming commands in order to build `state-machine`.
 - Finally, the results are published into out-bound ringbuffer (reply-buffer) in order to reply back to `client-apps`.
 
