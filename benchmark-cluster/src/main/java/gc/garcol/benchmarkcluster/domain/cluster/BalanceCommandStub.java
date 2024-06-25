@@ -104,7 +104,7 @@ public class BalanceCommandStub {
             public void onError(Throwable throwable) {
                 log.error("on error observer balance", throwable);
                 replyFutures.clear();
-                slientSleep(2_000);
+                silentSleep(2_000);
                 initRequestStreamObserver();
             }
 
@@ -116,7 +116,7 @@ public class BalanceCommandStub {
         };
     }
 
-    private void slientSleep(long time) {
+    private void silentSleep(long time) {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {}
