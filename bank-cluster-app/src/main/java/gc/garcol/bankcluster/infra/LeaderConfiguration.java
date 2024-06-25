@@ -113,11 +113,6 @@ public class LeaderConfiguration {
     }
 
     @Bean
-    ReplyBufferHandler replyBufferHandler() {
-        return new ReplyBufferHandlerImpl();
-    }
-
-    @Bean
     Disruptor<ReplyBufferEvent> replyBufferEventDisruptor(ReplyBufferHandler replyBufferHandler, LeaderProperties leaderProperties) {
         return new ReplyBufferDisruptorDSL(replyBufferHandler).build(leaderProperties.getReplyBufferSize(), new YieldingWaitStrategy());
     }

@@ -16,6 +16,6 @@ spring.datasource:
 
 ---
 leader:
-  commandBufferPow: 15
-  replyBufferPow: 16
+  commandBufferPow: 18
+  replyBufferPow: 19
   logsChunkSize: 150
