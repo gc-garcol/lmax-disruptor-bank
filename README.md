@@ -92,6 +92,7 @@ This is achieved by journaling `command logs` into Kafka and by omitting the use
 ## Project structure
 - `cluster-core`: Domain logic.
 - `cluster-app`: Implements `cluster-core` and provides transport-layer (ex: grpc), framework-layer.
+- `client-core`: Provides `libs` to interacts with `cluster`, provides `request-reply` channel for incoming requests.
 - `client`: Interacts with `cluster-app`, providers `api-resource`.
 
 ## Show helps
