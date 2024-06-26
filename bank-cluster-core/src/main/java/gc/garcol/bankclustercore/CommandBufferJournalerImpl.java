@@ -37,6 +37,7 @@ public class CommandBufferJournalerImpl implements CommandBufferJournaler {
 
     @Override
     public void onEvent(CommandBufferEvent event, long sequence, boolean endOfBatch) throws Exception {
+        if (event == null || event.getCommand() == null) return;
         pushToBuffers(event);
         if (endOfBatch) {
             journalCommandLogs();
