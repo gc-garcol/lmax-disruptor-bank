@@ -13,7 +13,7 @@
 ![kafka-badge](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
 
 A simple high performance bank application using command sourcing.
-- Process around `52.000` **write-requests** per second on a single `leader` node.
+- Process around `56.000` **write-requests** per second on a single `leader` node.
 
   Result of sending 500k deposit-requests to the `leader` (running on a MacBook Pro 13-inch, M1, 2020):
 
@@ -42,9 +42,9 @@ This is achieved by journaling `command logs` into Kafka and by omitting the use
 
 #### Leader core flow
 - All commands requested from client-apps are published into a inbound ring-buffer (command-buffer).
-- The commands are then streamed into disk (kafka - one partition) chunk by chunk.
+- The commands are then grouped into chunks and then streamed into disk (kafka - one partition) when disruptor's `EventHandler` reaches `endOfBatch`.
 - The business-logic consumer then processes all incoming commands in order to build `state-machine`.
-- Finally, the results are published into out-bound ringbuffer (reply-buffer) in order to reply back to `client-apps`.
+- Finally, the results are published into out-bound ring-buffer (reply-buffer) in order to reply back to `client-apps`.
 
 ### Cluster structure
 
@@ -152,4 +152,4 @@ ghz --insecure --proto ./bank-libs/bank-cluster-proto/src/main/proto/balance.pro
 See [BENCHMARK](./README_benchmark.md) for more details.
 
 ## Archive
-- [Archive-grpc](https://github.com/gc-garcol/lmax-disruptor-bank/tree/archive/v1-grpc-protocol)
+- [Archive-grpc](https://github.com/gc-garcol/lmax-disruptor-bank/tree/archive/v2-grpc)

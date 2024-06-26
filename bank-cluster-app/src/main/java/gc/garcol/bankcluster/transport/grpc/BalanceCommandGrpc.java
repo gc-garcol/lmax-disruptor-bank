@@ -35,70 +35,18 @@ public class BalanceCommandGrpc extends BalanceCommandServiceGrpc.BalanceCommand
             @Override
             public void onNext(BalanceProto.BalanceCommand balanceCommand) {
                 if (ClusterStatus.STATE.get().equals(ClusterStatus.NOT_AVAILABLE)) {
-                    responseObserver.onNext(
-                        BalanceProto.BaseResult.newBuilder()
-                            .setCode(503)
-                            .setMessage("Service not available")
-                            .build()
-                    );
+                    responseError(responseObserver, 503, "Service not available", null);
                 }
                 try {
                     switch (balanceCommand.getTypeCase()) {
-                        case CREATEBALANCECOMMAND -> commandBufferEventDispatcher.dispatch(
-                            new CommandBufferEvent(
-                                replyChannel,
-                                balanceCommand.getCreateBalanceCommand().getCorrelationId(),
-                                new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                                    .setCreateBalanceCommand(balanceCommand.getCreateBalanceCommand())
-                                    .build()
-                                )
-                            )
-                        );
-                        case DEPOSITCOMMAND -> commandBufferEventDispatcher.dispatch(
-                            new CommandBufferEvent(
-                                replyChannel,
-                                balanceCommand.getDepositCommand().getCorrelationId(),
-                                new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                                    .setDepositCommand(balanceCommand.getDepositCommand())
-                                    .build()
-                                )
-                            )
-                        );
-                        case WITHDRAWCOMMAND -> commandBufferEventDispatcher.dispatch(
-                            new CommandBufferEvent(
-                                replyChannel,
-                                balanceCommand.getWithdrawCommand().getCorrelationId(),
-                                new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                                    .setWithdrawCommand(balanceCommand.getWithdrawCommand())
-                                    .build()
-                                )
-                            )
-                        );
-                        case TRANSFERCOMMAND -> commandBufferEventDispatcher.dispatch(
-                            new CommandBufferEvent(
-                                replyChannel,
-                                balanceCommand.getTransferCommand().getCorrelationId(),
-                                new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                                    .setTransferCommand(balanceCommand.getTransferCommand())
-                                    .build()
-                                )
-                            )
-                        );
-                        default -> responseObserver.onNext(
-                            BalanceProto.BaseResult.newBuilder()
-                                .setCode(400)
-                                .setMessage("Invalid balance command")
-                                .build()
-                        );
+                        case CREATEBALANCECOMMAND -> create(replyChannel, balanceCommand);
+                        case DEPOSITCOMMAND -> deposit(replyChannel, balanceCommand);
+                        case WITHDRAWCOMMAND -> withdraw(replyChannel, balanceCommand);
+                        case TRANSFERCOMMAND -> transfer(replyChannel, balanceCommand);
+                        default -> responseError(responseObserver, 400, "Invalid command", null);
                     }
                 } catch (Exception e) {
-                    log.error("Failed to send command", e);
-                    responseObserver.onNext(
-                        BalanceProto.BaseResult.newBuilder()
-                            .setCode(500)
-                            .setMessage("Failed to send command")
-                            .build()
-                    );
+                    responseError(responseObserver, 500, "Internal server error", e);
                 }
             }
 
@@ -116,5 +64,69 @@ public class BalanceCommandGrpc extends BalanceCommandServiceGrpc.BalanceCommand
                 responseObserver.onCompleted();
             }
         };
+    }
+
+    private void create(String replyChannel, BalanceProto.BalanceCommand balanceCommand) {
+        commandBufferEventDispatcher.dispatch(
+            new CommandBufferEvent(
+                replyChannel,
+                balanceCommand.getCreateBalanceCommand().getCorrelationId(),
+                new BaseCommand(BalanceProto.CommandLog.newBuilder()
+                    .setCreateBalanceCommand(balanceCommand.getCreateBalanceCommand())
+                    .build()
+                )
+            )
+        );
+    }
+
+    private void deposit(String replyChannel, BalanceProto.BalanceCommand balanceCommand) {
+        commandBufferEventDispatcher.dispatch(
+            new CommandBufferEvent(
+                replyChannel,
+                balanceCommand.getDepositCommand().getCorrelationId(),
+                new BaseCommand(BalanceProto.CommandLog.newBuilder()
+                    .setDepositCommand(balanceCommand.getDepositCommand())
+                    .build()
+                )
+            )
+        );
+    }
+
+    private void withdraw(String replyChannel, BalanceProto.BalanceCommand balanceCommand) {
+        commandBufferEventDispatcher.dispatch(
+            new CommandBufferEvent(
+                replyChannel,
+                balanceCommand.getWithdrawCommand().getCorrelationId(),
+                new BaseCommand(BalanceProto.CommandLog.newBuilder()
+                    .setWithdrawCommand(balanceCommand.getWithdrawCommand())
+                    .build()
+                )
+            )
+        );
+    }
+
+    private void transfer(String replyChannel, BalanceProto.BalanceCommand balanceCommand) {
+        commandBufferEventDispatcher.dispatch(
+            new CommandBufferEvent(
+                replyChannel,
+                balanceCommand.getTransferCommand().getCorrelationId(),
+                new BaseCommand(BalanceProto.CommandLog.newBuilder()
+                    .setTransferCommand(balanceCommand.getTransferCommand())
+                    .build()
+                )
+            )
+        );
+    }
+
+    private void responseError(StreamObserver<BalanceProto.BaseResult> responseObserver, int code, String message, Exception e) {
+        if (e != null) {
+            log.error(message, e);
+        }
+        responseObserver.onNext(
+            BalanceProto.BaseResult.newBuilder()
+                .setCode(code)
+                .setMessage(message)
+                .build()
+        );
     }
 }
