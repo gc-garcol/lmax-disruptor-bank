@@ -14,6 +14,10 @@ public class ReplyBufferEventDispatcherImpl implements ReplyBufferEventDispatche
 
     @Override
     public void dispatch(ReplyBufferEvent replyBufferEvent) {
-        replyBufferEventDisruptor.publishEvent((event, sequence) -> {});
+        replyBufferEventDisruptor.publishEvent((event, sequence) -> {
+            event.setCorrelationId(replyBufferEvent.getCorrelationId());
+            event.setResult(replyBufferEvent.getResult());
+            event.setReplyChannel(replyBufferEvent.getReplyChannel());
+        });
     }
 }

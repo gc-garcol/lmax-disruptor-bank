@@ -98,6 +98,11 @@ public class LeaderConfiguration {
     }
 
     @Bean
+    ReplyBufferEventDispatcher replyBufferEventDispatcher(Disruptor<ReplyBufferEvent> replyBufferEventDisruptor) {
+        return new ReplyBufferEventDispatcherImpl(replyBufferEventDisruptor);
+    }
+
+    @Bean
     CommandBufferReply commandBufferReply(ReplyBufferEventDispatcher replyBufferEventDispatcher) {
         return new CommandBufferReplyImpl(replyBufferEventDispatcher);
     }
