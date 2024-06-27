@@ -51,8 +51,11 @@ public class ServerBootstrap {
     }
 
     @Bean
-    RequestBufferDispatcher<BaseRequest> requestBufferDispatcher(Disruptor<RequestBufferEvent> balanceCommandBufferDisruptor) {
-        return new RequestBufferDispatcherImpl<>(balanceCommandBufferDisruptor);
+    RequestBufferDispatcher<BaseRequest> requestBufferDispatcher(
+        Disruptor<RequestBufferEvent> balanceCommandBufferDisruptor,
+        @Value("${request.timeout.milliseconds}") long timeoutMilliseconds
+    ) {
+        return new RequestBufferDispatcherImpl<>(balanceCommandBufferDisruptor, timeoutMilliseconds);
     }
 
     @Bean

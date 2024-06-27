@@ -2,7 +2,8 @@ spring.application.name: admin-app
 server.port: 8900
 ---
 spring.threads.virtual.enabled: true
-
+---
+request.timeout.milliseconds: 1000
 ---
 cluster:
   leader:

@@ -83,3 +83,10 @@ Latency distribution:
 Status code distribution:
   [OK]   500000 responses  
 ```
+
+## Benchmark client-nodes using `autocannon`
+```shell
+autocannon -c 16 -d 20 -m POST -H 'Content-Type: application/json' \
+-b '{"id":"1","amount":"1"}' \
+http://localhost:8900/api/v1/balance/command/deposit
+```
