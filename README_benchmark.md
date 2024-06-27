@@ -87,6 +87,7 @@ Status code distribution:
 ## Benchmark client-nodes using `autocannon`
 ```shell
 autocannon \
+--warmup [ -c 2 -d 10 ] \
 -c 16 -d 20 \
 -m POST \
 -H 'Content-Type: application/json' \
