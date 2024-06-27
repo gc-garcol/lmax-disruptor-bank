@@ -24,7 +24,7 @@ Benchmark deposit
 curl --location --request POST 'http://localhost:8900/api/balance-benchmark/benchmark/100000'
 ```
 
-## Using Ghz
+## Using Ghz for benchmarking the `cluster` nodes (`leader`, `follower`)
 We open many grpc connections to the `leader` node. 
 
 - Deposit
@@ -86,7 +86,10 @@ Status code distribution:
 
 ## Benchmark client-nodes using `autocannon`
 ```shell
-autocannon -c 16 -d 20 -m POST -H 'Content-Type: application/json' \
+autocannon \
+-c 16 -d 20 \
+-m POST \
+-H 'Content-Type: application/json' \
 -b '{"id":"1","amount":"1"}' \
 http://localhost:8900/api/v1/balance/command/deposit
 ```

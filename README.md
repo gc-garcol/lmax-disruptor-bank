@@ -149,6 +149,9 @@ ghz --insecure --proto ./bank-libs/bank-cluster-proto/src/main/proto/balance.pro
 127.0.0.1:9500
 ```
 
+### How to benchmark client apps?
+We use `autocannon` (it can produce more load than `wrk` and `wrk2`).
+
 See [BENCHMARK](./README_benchmark.md) for more details.
 
 ## Archive
