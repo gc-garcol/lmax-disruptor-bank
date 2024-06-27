@@ -87,10 +87,35 @@ Status code distribution:
 ## Benchmark client-nodes using `autocannon`
 ```shell
 autocannon \
---warmup [ -c 2 -d 10 ] \
--c 16 -d 20 \
+--warmup [ -c 32 -d 20 ] \
+-c 32 -d 30 \
 -m POST \
 -H 'Content-Type: application/json' \
 -b '{"id":"1","amount":"1"}' \
 http://localhost:8900/api/v1/balance/command/deposit
 ```
+
+```shell
+┌─────────┬──────┬────────┬────────┬────────┬───────────┬───────┬─────────┐
+│ Stat    │ 2.5% │ 50%    │ 97.5%  │ 99%    │ Avg       │ Stdev │ Max     │
+├─────────┼──────┼────────┼────────┼────────┼───────────┼───────┼─────────┤
+│ Latency │ 8 ms │ 140 ms │ 326 ms │ 359 ms │ 147.04 ms │ 99 ms │ 1298 ms │
+└─────────┴──────┴────────┴────────┴────────┴───────────┴───────┴─────────┘
+┌───────────┬─────────┬─────────┬────────┬─────────┬───────────┬────────┬─────────┐
+│ Stat      │ 1%      │ 2.5%    │ 50%    │ 97.5%   │ Avg       │ Stdev  │ Min     │
+├───────────┼─────────┼─────────┼────────┼─────────┼───────────┼────────┼─────────┤
+│ Req/Sec   │ 9,079   │ 9,079   │ 10,287 │ 12,375  │ 10,478.94 │ 848.02 │ 9,072   │
+├───────────┼─────────┼─────────┼────────┼─────────┼───────────┼────────┼─────────┤
+│ Bytes/Sec │ 1.94 MB │ 1.94 MB │ 2.2 MB │ 2.65 MB │ 2.24 MB   │ 181 kB │ 1.94 MB │
+└───────────┴─────────┴─────────┴────────┴─────────┴───────────┴────────┴─────────┘
+
+Req/Bytes counts sampled once per second.
+# of samples: 30
+
+317k requests in 30.03s, 67.2 MB read
+```
+
+The results of the test indicate that the `client-app` is capable of handling 10,000 write requests per second.
+Given the cluster's maximum capacity of 60,000 write requests per second,
+we can achieve this throughput by scaling the `client-app` to 6 instances.
+This will ensure that we fully utilize the cluster's capacity.
