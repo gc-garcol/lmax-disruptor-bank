@@ -61,6 +61,8 @@ Before we dive in, let's go over a few preliminary notes:
 - When the `cluster` (`leader`, `follower` or `learner`) restart, it first loads the `snapshot` first, then replays the `command-log` from `n + 1`'th offset to rebuild state-machine.
   - If there is no `snapshot` stored in the `database`, then the `cluster` will replay all `command-log` from the beginning.
 
+The snapshot trigger and logic can be found in `LearnerBootstrap -> startReplayMessage()` and `ReplayBufferHandlerByLearner`.
+
 ### Cluster structure
 
 #### Cluster hexagonal architecture
