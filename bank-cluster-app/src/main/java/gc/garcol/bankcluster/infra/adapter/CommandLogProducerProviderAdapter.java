@@ -30,6 +30,7 @@ public class CommandLogProducerProviderAdapter implements CommandLogProducerProv
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, clusterKafkaConfig.getBootstrapServers());
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class.getName());
+        props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "lz4");
         return new KafkaProducer<>(props);
     }
 }
