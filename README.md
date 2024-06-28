@@ -46,6 +46,21 @@ This is achieved by journaling `command logs` into Kafka and by omitting the use
 - The business-logic consumer then processes all incoming commands in order to build `state-machine`.
 - Finally, the results are published into an out-bound ring-buffer (reply-buffer) in order to reply back to `client-apps`.
 
+### How to snapshot the state-machine and replay the command logs ?
+
+Before we dive in, let's go over a few preliminary notes:
+- Only the `leader` node is responsible for writing the `command-log` into the into `command-log-storage`.
+- Meanwhile, the `learner` node is exclusively tasked with snapshotting the state machine.
+
+![snapshot-and-replay](docs/snapshot-and-replay.png)
+
+- Assume that the latest offset in kafka is `x` and the `learner` replays `command-log` up to m'th offset.
+- The `learner` snapshots the `state-machine` interval or every `command-size`.
+- Assume that the `learner` snapshots up to n'th offset.
+  - For `optimization`, the `learner` snapshots only the `states` that have changed from the last-snapshot-offset to n'th offset.
+- When the `cluster` (`leader`, `follower` or `learner`) restart, it first loads the `snapshot` first, then replays the `command-log` from `n + 1`'th offset to rebuild state-machine.
+  - If there is no `snapshot` stored in the `database`, then the `cluster` will replay all `command-log` from the beginning.
+
 ### Cluster structure
 
 #### Cluster hexagonal architecture
