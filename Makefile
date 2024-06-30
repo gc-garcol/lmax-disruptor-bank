@@ -24,8 +24,11 @@ run-learner: ## Run learner
 run-admin: ## Run admin app
 	./gradlew :bank-client-app-admin:run-admin
 
-run-benchmark-tool: ## Run benchmark tool
-	./gradlew :benchmark-cluster:run-benchmark-tool
-
 run-user: ## Run user app
 	./gradlew :bank-client-app-admin:run-user
+
+run-benchmark-tool: ## Run benchmark tool
+	./gradlew :benchmark:benchmark-cluster:run-benchmark-tool
+
+run-k6-tool: ## Run k6 benchmark
+	k6 run benchmark/k6/deposit.js

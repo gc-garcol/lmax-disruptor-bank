@@ -42,6 +42,10 @@ public class BalanceCommandBenchmarkResource {
 
     @PostMapping("/benchmark/{loop}")
     public String benchmark(@PathVariable Integer loop) throws InterruptedException, ExecutionException {
+        run(10_000);
+        run(loop / 2);
+        run(loop);
+        run(loop);
         var start = System.currentTimeMillis();
         run(loop);
         var end = System.currentTimeMillis();
