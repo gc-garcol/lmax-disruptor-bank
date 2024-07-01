@@ -17,11 +17,11 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2024
  */
 @Slf4j
-public class BalanceCommandStub extends BaseAsyncStub<BalanceProto.BalanceCommand, BalanceProto.BaseResult> {
+public class BalanceCommandGrpcStub extends BaseAsyncStub<BalanceProto.BalanceCommand, BalanceProto.BaseResult> {
 
     private final BalanceCommandServiceGrpc.BalanceCommandServiceStub balanceCommandServiceStub;
 
-    public BalanceCommandStub(BalanceCommandServiceGrpc.BalanceCommandServiceStub balanceCommandServiceStub) {
+    public BalanceCommandGrpcStub(BalanceCommandServiceGrpc.BalanceCommandServiceStub balanceCommandServiceStub) {
         this.balanceCommandServiceStub = balanceCommandServiceStub;
         this.initRequestStreamObserver();
     }

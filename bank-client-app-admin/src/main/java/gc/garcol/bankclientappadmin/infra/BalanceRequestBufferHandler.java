@@ -19,16 +19,16 @@ import lombok.extern.slf4j.Slf4j;
 public class BalanceRequestBufferHandler
     implements RequestBufferHandler {
 
-    private final BalanceCommandStub balanceCommandStub;
-    private final BalanceQueryStub balanceQueryStub;
+    private final BalanceCommandGrpcStub balanceCommandGrpcStub;
+    private final BalanceQueryQueryGrpcStub balanceQueryQueryGrpcStub;
 
     @Override
     public void onEvent(RequestBufferEvent event, long sequence, boolean endOfBatch) throws Exception {
         try {
             if (event.getRequest() instanceof BalanceCommand) {
-                balanceCommandStub.sendGrpcMessage(event);
+                balanceCommandGrpcStub.sendGrpcMessage(event);
             } else if (event.getRequest() instanceof BalanceQuery) {
-                balanceQueryStub.sendGrpcMessage(event);
+                balanceQueryQueryGrpcStub.sendGrpcMessage(event);
             } else {
                 log.error("Unknown event type: {}", event.getClass().getName());
                 event.getResponseFuture().complete(new BaseResponse(400, "Unknown event type"));

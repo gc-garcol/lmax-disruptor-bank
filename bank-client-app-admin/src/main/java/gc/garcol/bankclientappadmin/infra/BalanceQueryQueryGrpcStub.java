@@ -13,11 +13,11 @@ import io.grpc.stub.StreamObserver;
  * @author thaivc
  * @since 2024
  */
-public class BalanceQueryStub extends BaseAsyncStub<BalanceProto.BalanceQuery, BalanceProto.BalanceQueryResult> {
+public class BalanceQueryQueryGrpcStub extends BaseAsyncStub<BalanceProto.BalanceQuery, BalanceProto.BalanceQueryResult> {
 
     private final BalanceQueryServiceGrpc.BalanceQueryServiceStub balanceQueryServiceStub;
 
-    public BalanceQueryStub(BalanceQueryServiceGrpc.BalanceQueryServiceStub balanceQueryServiceStub) {
+    public BalanceQueryQueryGrpcStub(BalanceQueryServiceGrpc.BalanceQueryServiceStub balanceQueryServiceStub) {
         this.balanceQueryServiceStub = balanceQueryServiceStub;
         this.initRequestStreamObserver();
     }

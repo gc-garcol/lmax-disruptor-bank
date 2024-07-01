@@ -1,7 +1,7 @@
 package gc.garcol.bankcluster.transport.grpc;
 
 import gc.garcol.bankcluster.infra.SimpleReplier;
-import gc.garcol.bankclustercore.CommandBufferEventDispatcher;
+import gc.garcol.bankcluster.transport.CommandBufferEventDispatcherWrapper;
 import gc.garcol.bankclustercore.account.Balances;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
 public class BalanceGrpcResourceLeader {
     private final Balances balances;
     private final SimpleReplier replier;
-    private final CommandBufferEventDispatcher commandBufferEventDispatcher;
+    private final CommandBufferEventDispatcherWrapper commandBufferEventDispatcherWrapper;
     private Server server;
 
     @Value("${server.grpc.port}")
@@ -36,7 +36,7 @@ public class BalanceGrpcResourceLeader {
     void init() {
         try {
             var balanceQueryGrpc = new BalanceQueryGrpc(balances);
-            var balanceCommandGrpc = new BalanceCommandGrpc(commandBufferEventDispatcher, replier);
+            var balanceCommandGrpc = new BalanceCommandGrpc(commandBufferEventDispatcherWrapper, replier);
             server = ServerBuilder.forPort(serverPort)
                 .addService(balanceQueryGrpc)
                 .addService(balanceCommandGrpc)

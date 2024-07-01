@@ -3,15 +3,14 @@ package gc.garcol.bankcluster.transport.grpc;
 import gc.garcol.bank.proto.BalanceCommandServiceGrpc;
 import gc.garcol.bank.proto.BalanceProto;
 import gc.garcol.bankcluster.infra.SimpleReplier;
-import gc.garcol.bankclustercore.BaseCommand;
-import gc.garcol.bankclustercore.CommandBufferEvent;
-import gc.garcol.bankclustercore.CommandBufferEventDispatcher;
+import gc.garcol.bankcluster.transport.CommandBufferEventDispatcherWrapper;
 import gc.garcol.bankclustercore.cluster.ClusterStatus;
 import io.grpc.stub.StreamObserver;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author thaivc
@@ -21,16 +20,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BalanceCommandGrpc extends BalanceCommandServiceGrpc.BalanceCommandServiceImplBase {
 
-    private final CommandBufferEventDispatcher commandBufferEventDispatcher;
+    private final CommandBufferEventDispatcherWrapper commandBufferEventDispatcherWrapper;
     private final SimpleReplier simpleReplier;
+
+    @PreDestroy
+    void destroy() {
+        simpleReplier.grpcRepliers.clear();
+    }
 
     /**
      * Send command to balance service
      */
     @Override
     public StreamObserver<BalanceProto.BalanceCommand> sendCommand(StreamObserver<BalanceProto.BaseResult> responseObserver) {
-        var replyChannel = UUID.randomUUID().toString();
-        simpleReplier.repliers.put(replyChannel, responseObserver);
+        var replyChannel = String.format("grpc-%s", ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE));
+        simpleReplier.grpcRepliers.put(replyChannel, responseObserver);
         return new StreamObserver<>() {
             @Override
             public void onNext(BalanceProto.BalanceCommand balanceCommand) {
@@ -39,10 +43,10 @@ public class BalanceCommandGrpc extends BalanceCommandServiceGrpc.BalanceCommand
                 }
                 try {
                     switch (balanceCommand.getTypeCase()) {
-                        case CREATEBALANCECOMMAND -> create(replyChannel, balanceCommand);
-                        case DEPOSITCOMMAND -> deposit(replyChannel, balanceCommand);
-                        case WITHDRAWCOMMAND -> withdraw(replyChannel, balanceCommand);
-                        case TRANSFERCOMMAND -> transfer(replyChannel, balanceCommand);
+                        case CREATEBALANCECOMMAND -> commandBufferEventDispatcherWrapper.create(replyChannel, balanceCommand);
+                        case DEPOSITCOMMAND -> commandBufferEventDispatcherWrapper.deposit(replyChannel, balanceCommand);
+                        case WITHDRAWCOMMAND -> commandBufferEventDispatcherWrapper.withdraw(replyChannel, balanceCommand);
+                        case TRANSFERCOMMAND -> commandBufferEventDispatcherWrapper.transfer(replyChannel, balanceCommand);
                         default -> responseError(responseObserver, 400, "Invalid command", null);
                     }
                 } catch (Exception e) {
@@ -53,69 +57,17 @@ public class BalanceCommandGrpc extends BalanceCommandServiceGrpc.BalanceCommand
             @Override
             public void onError(Throwable throwable) {
                 log.error("on command streaming error", throwable);
-                simpleReplier.repliers.remove(replyChannel);
+                simpleReplier.grpcRepliers.remove(replyChannel);
                 responseObserver.onError(throwable);
             }
 
             @Override
             public void onCompleted() {
                 log.info("on completed command streaming");
-                simpleReplier.repliers.remove(replyChannel);
+                simpleReplier.grpcRepliers.remove(replyChannel);
                 responseObserver.onCompleted();
             }
         };
-    }
-
-    private void create(String replyChannel, BalanceProto.BalanceCommand balanceCommand) {
-        commandBufferEventDispatcher.dispatch(
-            new CommandBufferEvent(
-                replyChannel,
-                balanceCommand.getCreateBalanceCommand().getCorrelationId(),
-                new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                    .setCreateBalanceCommand(balanceCommand.getCreateBalanceCommand())
-                    .build()
-                )
-            )
-        );
-    }
-
-    private void deposit(String replyChannel, BalanceProto.BalanceCommand balanceCommand) {
-        commandBufferEventDispatcher.dispatch(
-            new CommandBufferEvent(
-                replyChannel,
-                balanceCommand.getDepositCommand().getCorrelationId(),
-                new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                    .setDepositCommand(balanceCommand.getDepositCommand())
-                    .build()
-                )
-            )
-        );
-    }
-
-    private void withdraw(String replyChannel, BalanceProto.BalanceCommand balanceCommand) {
-        commandBufferEventDispatcher.dispatch(
-            new CommandBufferEvent(
-                replyChannel,
-                balanceCommand.getWithdrawCommand().getCorrelationId(),
-                new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                    .setWithdrawCommand(balanceCommand.getWithdrawCommand())
-                    .build()
-                )
-            )
-        );
-    }
-
-    private void transfer(String replyChannel, BalanceProto.BalanceCommand balanceCommand) {
-        commandBufferEventDispatcher.dispatch(
-            new CommandBufferEvent(
-                replyChannel,
-                balanceCommand.getTransferCommand().getCorrelationId(),
-                new BaseCommand(BalanceProto.CommandLog.newBuilder()
-                    .setTransferCommand(balanceCommand.getTransferCommand())
-                    .build()
-                )
-            )
-        );
     }
 
     private void responseError(StreamObserver<BalanceProto.BaseResult> responseObserver, int code, String message, Exception e) {

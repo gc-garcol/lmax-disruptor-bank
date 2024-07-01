@@ -4,6 +4,7 @@ import gc.garcol.bank.proto.BalanceProto;
 import io.grpc.stub.StreamObserver;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Sinks;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,5 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Profile("leader")
 @Component
 public class SimpleReplier {
-    public final Map<String, StreamObserver<BalanceProto.BaseResult>> repliers = new ConcurrentHashMap<>();
+    public final Map<String, StreamObserver<BalanceProto.BaseResult>> grpcRepliers = new ConcurrentHashMap<>();
+
+    public final Map<String, Sinks.Many<BalanceProto.BaseResult>> rsocketRepliers = new ConcurrentHashMap<>();
 }

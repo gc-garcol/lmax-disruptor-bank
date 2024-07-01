@@ -59,17 +59,17 @@ public class ServerBootstrap {
     }
 
     @Bean
-    BalanceCommandStub balanceCommandStub(BalanceCommandServiceGrpc.BalanceCommandServiceStub balanceCommandServiceStub) {
-        return new BalanceCommandStub(balanceCommandServiceStub);
+    BalanceCommandGrpcStub balanceCommandStub(BalanceCommandServiceGrpc.BalanceCommandServiceStub balanceCommandServiceStub) {
+        return new BalanceCommandGrpcStub(balanceCommandServiceStub);
     }
 
     @Bean
-    BalanceQueryStub balanceQueryStub(BalanceQueryServiceGrpc.BalanceQueryServiceStub balanceQueryServiceStub) {
-        return new BalanceQueryStub(balanceQueryServiceStub);
+    BalanceQueryQueryGrpcStub balanceQueryStub(BalanceQueryServiceGrpc.BalanceQueryServiceStub balanceQueryServiceStub) {
+        return new BalanceQueryQueryGrpcStub(balanceQueryServiceStub);
     }
 
     @Bean
-    BalanceRequestBufferHandler balanceRequestBufferHandler(BalanceCommandStub balanceCommandStub, BalanceQueryStub balanceQueryStub) {
-        return new BalanceRequestBufferHandler(balanceCommandStub, balanceQueryStub);
+    BalanceRequestBufferHandler balanceRequestBufferHandler(BalanceCommandGrpcStub balanceCommandGrpcStub, BalanceQueryQueryGrpcStub balanceQueryQueryGrpcStub) {
+        return new BalanceRequestBufferHandler(balanceCommandGrpcStub, balanceQueryQueryGrpcStub);
     }
 }
