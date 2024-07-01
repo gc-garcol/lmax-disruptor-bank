@@ -1,13 +1,11 @@
-package gc.garcol.benchmarkcluster.domain.cluster;
+package gc.garcol.benchmarkclusterjmh.domain.cluster;
 
 import gc.garcol.bank.proto.BalanceCommandServiceGrpc;
 import gc.garcol.bank.proto.BalanceProto;
-import gc.garcol.benchmarkcluster.domain.cluster.commands.*;
 import gc.garcol.benchmarkclusterjmh.domain.cluster.commands.*;
-import gc.garcol.benchmarkcluster.transport.rest.BaseResponse;
+import gc.garcol.benchmarkclusterjmh.transport.rest.BaseResponse;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Optional;
@@ -19,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2024
  */
 @Slf4j
-@Component
 public class BalanceCommandStub {
 
     private final BalanceCommandServiceGrpc.BalanceCommandServiceStub balanceCommandServiceStub;

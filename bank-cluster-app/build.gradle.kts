@@ -30,13 +30,17 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    // Protobuf
+    // Grpc + Protobuf
     runtimeOnly("io.grpc:grpc-netty-shaded:${libs.versions.grpcVersion.get()}")
     implementation("io.grpc:grpc-services:${libs.versions.grpcVersion.get()}")
     implementation("io.grpc:grpc-protobuf:${libs.versions.grpcVersion.get()}")
     implementation("io.grpc:grpc-stub:${libs.versions.grpcVersion.get()}")
     compileOnly("org.apache.tomcat:annotations-api:${libs.versions.annotationsApiVersion.get()}")
     implementation("com.google.protobuf:protobuf-java-util:${libs.versions.protocVersion.get()}")
+
+    // RSocket
+    implementation("org.springframework.boot:spring-boot-starter-rsocket:${libs.versions.springBoot.get()}")
+
 }
 
 @Suppress("DEPRECATION")

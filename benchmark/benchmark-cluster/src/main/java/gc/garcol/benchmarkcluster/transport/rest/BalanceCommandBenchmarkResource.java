@@ -1,7 +1,7 @@
 package gc.garcol.benchmarkcluster.transport.rest;
 
-import gc.garcol.benchmarkcluster.domain.cluster.BalanceCommandStub;
 import gc.garcol.benchmarkcluster.domain.cluster.commands.DepositCommand;
+import gc.garcol.benchmarkcluster.domain.cluster.BalanceCommandStub;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;

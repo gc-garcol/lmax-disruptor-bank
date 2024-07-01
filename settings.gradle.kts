@@ -14,7 +14,10 @@ include(
     "bank-cluster-core",
     "bank-cluster-app"
 )
-include("benchmark:benchmark-cluster")
+include(
+    "benchmark:benchmark-cluster",
+    "benchmark:benchmark-cluster-jmh"
+)
 include(
     "bank-client-core",
     "bank-client-app-user",

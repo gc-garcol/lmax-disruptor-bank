@@ -24,6 +24,11 @@ Benchmark deposit
 curl --location --request POST 'http://localhost:8900/api/balance-benchmark/benchmark/100000'
 ```
 
+## Using jmh
+```shell
+./gradlew jmh
+```
+
 ## Using Ghz for benchmarking the `cluster` nodes (`leader`, `follower`)
 We open many grpc connections to the `leader` node. 
 
