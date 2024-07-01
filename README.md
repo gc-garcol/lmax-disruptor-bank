@@ -13,7 +13,7 @@
 ![kafka-badge](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
 
 A simple high performance bank application using command sourcing.
-- Process around `180,000` **write-requests** per second on a single `leader` node.
+- Process around `200,000` **write-requests** per second on a single `leader` node.
 
   Result of sending 500k write-requests (deposit only) to the `leader` with 64 grpc connections (running on a MacBook Pro, 13-inch, M1, 16 GB, 2020):
 
