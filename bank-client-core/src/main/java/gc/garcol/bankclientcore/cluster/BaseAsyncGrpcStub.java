@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
  * @since 2024
  */
 @Slf4j
-public abstract class BaseAsyncStub<REQUEST, RESULT> {
+public abstract class BaseAsyncGrpcStub<REQUEST, RESULT> {
 
     protected StreamObserver<REQUEST> requestStreamObserver;
 

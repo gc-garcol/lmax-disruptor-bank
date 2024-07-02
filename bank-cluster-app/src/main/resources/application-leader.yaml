@@ -19,3 +19,6 @@ leader:
   commandBufferPow: 18
   replyBufferPow: 19
   logsChunkSize: 150
+
+---
+spring.rsocket.server.port: 7000

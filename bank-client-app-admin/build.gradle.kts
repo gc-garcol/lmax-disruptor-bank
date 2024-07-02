@@ -25,13 +25,16 @@ dependencies {
     compileOnly("org.projectlombok:lombok:${libs.versions.lombokVersion.get()}")
     annotationProcessor("org.projectlombok:lombok:${libs.versions.lombokVersion.get()}")
 
-    // Protobuf
+    // Protobuf + grpc
     runtimeOnly("io.grpc:grpc-netty-shaded:${libs.versions.grpcVersion.get()}")
     implementation("io.grpc:grpc-services:${libs.versions.grpcVersion.get()}")
     implementation("io.grpc:grpc-protobuf:${libs.versions.grpcVersion.get()}")
     implementation("io.grpc:grpc-stub:${libs.versions.grpcVersion.get()}")
     compileOnly("org.apache.tomcat:annotations-api:${libs.versions.annotationsApiVersion.get()}")
     implementation("com.google.protobuf:protobuf-java-util:${libs.versions.protocVersion.get()}")
+
+    // RSocket
+    implementation("org.springframework.boot:spring-boot-starter-rsocket")
 }
 
 @Suppress("DEPRECATION")

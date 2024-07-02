@@ -30,7 +30,7 @@ public class ServerBootstrap {
     private Disruptor<RequestBufferEvent> balanceCommandBufferDisruptor;
 
     @EventListener(ApplicationReadyEvent.class)
-    void startServer() {
+    public void startServer() {
         balanceCommandBufferDisruptor.start();
     }
 

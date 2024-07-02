@@ -149,6 +149,11 @@ make run-admin
 make run-user
 ```
 
+- [X] Shutdown all services
+```shell
+./gradlew --stop
+```
+
 ## FAQ
 ### How to test grpc endpoint?
 In order to test grpc server, you can use portman to send message like this

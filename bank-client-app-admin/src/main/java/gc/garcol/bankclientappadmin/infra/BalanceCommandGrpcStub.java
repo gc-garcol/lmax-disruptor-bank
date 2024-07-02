@@ -6,7 +6,7 @@ import gc.garcol.bankclientappadmin.infra.command.CreateBalanceCommand;
 import gc.garcol.bankclientappadmin.infra.command.DepositCommand;
 import gc.garcol.bankclientappadmin.infra.command.TransferCommand;
 import gc.garcol.bankclientappadmin.infra.command.WithdrawCommand;
-import gc.garcol.bankclientcore.cluster.BaseAsyncStub;
+import gc.garcol.bankclientcore.cluster.BaseAsyncGrpcStub;
 import gc.garcol.bankclientcore.cluster.BaseResponse;
 import gc.garcol.bankclientcore.cluster.RequestBufferEvent;
 import io.grpc.stub.StreamObserver;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2024
  */
 @Slf4j
-public class BalanceCommandGrpcStub extends BaseAsyncStub<BalanceProto.BalanceCommand, BalanceProto.BaseResult> {
+public class BalanceCommandGrpcStub extends BaseAsyncGrpcStub<BalanceProto.BalanceCommand, BalanceProto.BaseResult> {
 
     private final BalanceCommandServiceGrpc.BalanceCommandServiceStub balanceCommandServiceStub;
 

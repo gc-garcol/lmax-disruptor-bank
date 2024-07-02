@@ -4,7 +4,7 @@ import gc.garcol.bank.proto.BalanceProto;
 import gc.garcol.bank.proto.BalanceQueryServiceGrpc;
 import gc.garcol.bankclientappadmin.infra.query.BalanceDetailQuery;
 import gc.garcol.bankclientappadmin.infra.response.BalanceDetailResponse;
-import gc.garcol.bankclientcore.cluster.BaseAsyncStub;
+import gc.garcol.bankclientcore.cluster.BaseAsyncGrpcStub;
 import gc.garcol.bankclientcore.cluster.BaseResponse;
 import gc.garcol.bankclientcore.cluster.RequestBufferEvent;
 import io.grpc.stub.StreamObserver;
@@ -13,7 +13,7 @@ import io.grpc.stub.StreamObserver;
  * @author thaivc
  * @since 2024
  */
-public class BalanceQueryQueryGrpcStub extends BaseAsyncStub<BalanceProto.BalanceQuery, BalanceProto.BalanceQueryResult> {
+public class BalanceQueryQueryGrpcStub extends BaseAsyncGrpcStub<BalanceProto.BalanceQuery, BalanceProto.BalanceQueryResult> {
 
     private final BalanceQueryServiceGrpc.BalanceQueryServiceStub balanceQueryServiceStub;
 
