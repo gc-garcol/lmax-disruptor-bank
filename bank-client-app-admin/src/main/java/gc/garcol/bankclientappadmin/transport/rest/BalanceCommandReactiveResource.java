@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -27,27 +28,27 @@ public class BalanceCommandReactiveResource {
     private final ReactorDispatcher<BalanceCommand> balanceReactiveDispatcher;
 
     @PostMapping("/create")
-    public CompletableFuture<BaseResponse> create() {
+    public Mono<BaseResponse> create() {
         var command = new CreateBalanceCommand();
         log.info("Create balance command: {}", command);
-        return requestBufferDispatcher.dispatch(command);
+        return balanceReactiveDispatcher.dispatch(command);
     }
 
     @PostMapping("/deposit")
-    public CompletableFuture<BaseResponse> deposit(@RequestBody DepositCommand command) {
+    public Mono<BaseResponse> deposit(@RequestBody DepositCommand command) {
         log.info("Deposit command: {}", command);
-        return requestBufferDispatcher.dispatch(command);
+        return balanceReactiveDispatcher.dispatch(command);
     }
 
     @PostMapping("/withdraw")
-    public CompletableFuture<BaseResponse> withdraw(@RequestBody WithdrawCommand command) {
+    public Mono<BaseResponse> withdraw(@RequestBody WithdrawCommand command) {
         log.info("Withdraw command: {}", command);
-        return requestBufferDispatcher.dispatch(command);
+        return balanceReactiveDispatcher.dispatch(command);
     }
 
     @PostMapping("/transfer")
-    public CompletableFuture<BaseResponse> transfer(@RequestBody TransferCommand command) {
+    public Mono<BaseResponse> transfer(@RequestBody TransferCommand command) {
         log.info("Transfer command: {}", command);
-        return requestBufferDispatcher.dispatch(command);
+        return balanceReactiveDispatcher.dispatch(command);
     }
 }
