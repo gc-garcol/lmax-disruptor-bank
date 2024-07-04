@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class BalanceQueryGrpc extends BalanceQueryServiceGrpc.BalanceQueryServiceImplBase {
+public class BalanceGrpcQuery extends BalanceQueryServiceGrpc.BalanceQueryServiceImplBase {
 
     private final Balances balances;
 

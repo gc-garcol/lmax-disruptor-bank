@@ -1,5 +1,6 @@
 package gc.garcol.bankcluster.transport.grpc;
 
+import com.google.common.util.concurrent.MoreExecutors;
 import gc.garcol.bankclustercore.account.Balances;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -29,9 +30,10 @@ public class BalanceGrpcResourceFollower {
     @PostConstruct
     void init() {
         try {
-            BalanceQueryGrpc balanceQueryGrpc = new BalanceQueryGrpc(balances);
+            BalanceGrpcQuery balanceGrpcQuery = new BalanceGrpcQuery(balances);
             server = ServerBuilder.forPort(serverPort)
-                .addService(balanceQueryGrpc)
+                .addService(balanceGrpcQuery)
+                .executor(MoreExecutors.directExecutor())
                 .build();
             server.start();
         } catch (Exception e) {

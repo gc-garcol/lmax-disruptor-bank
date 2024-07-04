@@ -19,7 +19,7 @@ import java.util.UUID;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class BalanceCommandGrpc extends BalanceCommandServiceGrpc.BalanceCommandServiceImplBase {
+public class BalanceGrpcCommand extends BalanceCommandServiceGrpc.BalanceCommandServiceImplBase {
 
     private final CommandBufferEventDispatcher commandBufferEventDispatcher;
     private final SimpleReplier simpleReplier;
