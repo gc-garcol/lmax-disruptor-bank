@@ -21,12 +21,12 @@ curl --location --request POST 'http://localhost:8900/api/balance-benchmark/warm
 
 Benchmark deposit
 ```shell
-curl --location --request POST 'http://localhost:8900/api/balance-benchmark/benchmark/200000'
+curl --location --request POST 'http://localhost:8900/api/balance-benchmark/benchmark/500000'
 ```
 
-Result of sending 200,000 write request to cluster:
+Result of sending 500,000 write request to cluster:
 
-![benchmark-200k.png](docs/benchmark/benchmark-200k.png)
+<img style="width: 400px; max-width: 100vw; border: 2px solid grey;" src="./docs/benchmark/simple-benchmark.png" alt="simple benchmark">
 
 ## Using Ghz for benchmarking the `cluster` nodes (`leader`, `follower`)
 We open many grpc connections to the `leader` node. 
