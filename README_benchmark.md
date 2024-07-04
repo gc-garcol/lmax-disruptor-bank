@@ -14,17 +14,12 @@ Start benchmark tool
 make run-benchmark-tool
 ```
 
-Warming up
-```shell
-curl --location --request POST 'http://localhost:8900/api/balance-benchmark/warmup/1000'
-```
-
 Benchmark deposit
 ```shell
-curl --location --request POST 'http://localhost:8900/api/balance-benchmark/benchmark/500000'
+curl --location --request POST 'http://localhost:8900/api/balance-benchmark/benchmark/500000/64'
 ```
 
-Result of sending 500,000 write request to cluster:
+Result of sending 500,000 write requests with 64 grpc connections to cluster:
 
 <img style="width: 400px; max-width: 100vw; border: 2px solid grey;" src="./docs/benchmark/simple-benchmark.png" alt="simple benchmark">
 

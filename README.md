@@ -13,9 +13,9 @@
 ![kafka-badge](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
 
 A simple high performance bank application using command sourcing.
-- Process around `80,000` **write-requests** per second on a single `leader` node.
+- Process around `180,000` **write-requests** per second on a single `leader` node.
 
-  Result of sending 500k deposit-requests to the `leader` (running on a MacBook Pro 13-inch, M1, 2020):
+  Result of sending 500k write-requests (deposit only) to the `leader` with 64 grpc connections (running on a MacBook Pro, 13-inch, M1, 16 GB, 2020):
 
   <img style="width: 400px; max-width: 100vw; border: 2px solid grey;" src="./docs/benchmark/simple-benchmark.png" alt="simple benchmark">
 
@@ -58,7 +58,7 @@ Before we dive in, let's go over a few preliminary notes:
 - The `learner` snapshots the `state-machine` interval or every `command-size`.
 - Assume that the `learner` snapshots up to n'th offset.
   - For `optimization`, the `learner` snapshots only the `states` that have changed from the last-snapshot-offset to n'th offset.
-- When the `cluster` (`leader`, `follower` or `learner`) restart, it first loads the `snapshot` first, then replays the `command-log` from `n + 1`'th offset to rebuild state-machine.
+- When the `cluster` (`leader`, `follower` or `learner`) restart, it first loads the `snapshot`, then replays the `command-log` from `n + 1`'th offset to rebuild state-machine.
   - If there is no `snapshot` stored in the `database`, then the `cluster` will replay all `command-log` from the beginning.
 
 The snapshot trigger and logic can be found in `LearnerBootstrap -> startReplayMessage()` and `ReplayBufferHandlerByLearner`.

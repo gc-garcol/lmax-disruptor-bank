@@ -1,8 +1,9 @@
 package gc.garcol.benchmarkcluster.transport.rest;
 
+import gc.garcol.bank.proto.BalanceCommandServiceGrpc;
 import gc.garcol.benchmarkcluster.domain.cluster.BalanceCommandStub;
 import gc.garcol.benchmarkcluster.domain.cluster.commands.DepositCommand;
-import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,32 +19,30 @@ import java.util.concurrent.ExecutionException;
  */
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/balance-benchmark")
 public class BalanceCommandBenchmarkResource {
+    private final int MAX_CONNECTIONS = 100;
+    private BalanceCommandStub[] balanceCommandStubs;
+    private int connections = 1;
 
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
-
-    private final BalanceCommandStub balanceCommandStub;
-
-    @PostMapping("/warmup/{loop}")
-    public String warmup(@PathVariable Integer loop) throws ExecutionException, InterruptedException {
-        run(loop);
-        return "Warmup done!";
+    public BalanceCommandBenchmarkResource(BalanceCommandServiceGrpc.BalanceCommandServiceStub balanceCommandServiceStub) {
+        balanceCommandStubs = new BalanceCommandStub[MAX_CONNECTIONS];
+        for (int i = 0; i < MAX_CONNECTIONS; i++) {
+            balanceCommandStubs[i] = new BalanceCommandStub(balanceCommandServiceStub);
+        }
     }
 
-    @PostMapping("/benchmark/{loop}")
-    public String benchmark(@PathVariable Integer loop) throws InterruptedException, ExecutionException {
+    @PostMapping("/benchmark/{loop}/{connections}")
+    public String benchmark(@PathVariable Integer loop, @PathVariable Integer connections) throws InterruptedException, ExecutionException {
+        if (connections > MAX_CONNECTIONS) {
+            return "connection must be <= " + MAX_CONNECTIONS;
+        }
+
+        this.connections = connections;
+
         run(10_000);
         run(loop / 2);
+        run(loop);
         run(loop);
         run(loop);
         var start = System.currentTimeMillis();
@@ -62,15 +61,28 @@ public class BalanceCommandBenchmarkResource {
         return result;
     }
 
+    @SneakyThrows
     private void run(int loop) {
-        CompletableFuture[] futures = new CompletableFuture[loop];
-
-        for (int i = 0; i < loop; i++) {
-            var command = new DepositCommand();
-            command.setId(1L);
-            command.setAmount(1L);
-            futures[i] = balanceCommandStub.sendCommand(command);
+        Thread[] threads = new Thread[connections];
+        for (int connection = 0; connection < connections; connection++) {
+            int connectionIdx = connection;
+            threads[connection] = new Thread(() -> {
+                int reqs = connectionIdx == connections - 1 ? loop - (loop / connections) * (connections - 1) : loop / connections;
+                CompletableFuture[] futures = new CompletableFuture[reqs];
+                for (int i = 0; i < reqs; i++) {
+                    var command = new DepositCommand();
+                    command.setId(1L);
+                    command.setAmount(1L);
+                    futures[i] = balanceCommandStubs[connectionIdx].sendCommand(command);
+                }
+                CompletableFuture.allOf(futures).join();
+            });
         }
-        CompletableFuture.allOf(futures).join();
+        for (int connection = 0; connection < connections; connection++) {
+            threads[connection].start();
+        }
+        for (int connection = 0; connection < connections; connection++) {
+            threads[connection].join();
+        }
     }
 }
