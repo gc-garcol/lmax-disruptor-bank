@@ -172,4 +172,5 @@ We use `autocannon` (it can produce more load than `wrk` and `wrk2`).
 See [BENCHMARK](./README_benchmark.md) for more details.
 
 ## Archive
-- [Archive-grpc](https://github.com/gc-garcol/lmax-disruptor-bank/tree/archive/grpc-v1)
+[Change logs](CHANGELOG.md):
+- [v1.0.0](https://github.com/gc-garcol/lmax-disruptor-bank/tree/archive/v0.0.1)
