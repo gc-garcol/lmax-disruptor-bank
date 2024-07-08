@@ -161,7 +161,7 @@ We use `ghz`([link](https://github.com/bojand/ghz)) as a benchmarking and load t
 ```shell
 ghz --insecure --proto ./bank-libs/bank-cluster-proto/src/main/proto/balance.proto \
 --call gc.garcol.bank.proto.BalanceQueryService/sendQuery \
--d '{"balanceFilterQuery": {"id": 1,"correlationId": "random-uuid"}}' \
+-d '{"singleBalanceQuery": {"id": 1,"correlationId": "random-uuid"}}' \
 -c 200 -n 100000 \
 127.0.0.1:9500
 ```

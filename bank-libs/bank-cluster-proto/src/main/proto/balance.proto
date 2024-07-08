@@ -3,7 +3,13 @@ package gc.garcol.bank.proto;
 
 option java_outer_classname = "BalanceProto";
 
-message Balance {
+message BaseResult {
+  uint32 code = 1;
+  string message = 2;
+  optional string correlationId = 3;
+}
+
+message SingleBalanceResult {
   uint64 id = 1;
   uint64 amount = 2;
   uint32 precision = 3;
@@ -11,15 +17,9 @@ message Balance {
   string correlationId = 5;
 }
 
-message BaseResult {
-  uint32 code = 1;
-  string message = 2;
-  optional string correlationId = 3;
-}
-
 message BaseResponse {
   oneof type {
-    Balance balance = 1;
+    SingleBalanceResult singleBalanceResult = 1;
     BaseResult baseResult = 2;
   }
 }
@@ -56,20 +56,20 @@ message BalanceCommand {
   }
 }
 
-message BalanceFilterQuery {
+message SingleBalanceQuery {
   uint64 id = 1;
   string correlationId = 2;
 }
 
 message BalanceQuery {
   oneof type {
-      BalanceFilterQuery balanceFilterQuery = 1;
+      SingleBalanceQuery singleBalanceQuery = 1;
   }
 }
 
 message BalanceQueryResult {
   oneof type {
-    Balance balance = 1;
+    SingleBalanceResult singleBalanceResult = 1;
     BaseResult baseResult = 2;
   }
 }

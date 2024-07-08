@@ -37,17 +37,17 @@ public class BalanceGrpcQuery extends BalanceQueryServiceGrpc.BalanceQueryServic
                     return;
                 }
                 switch (balanceQuery.getTypeCase()) {
-                    case BALANCEFILTERQUERY -> {
-                        Balance balance = balances.getBalance(balanceQuery.getBalanceFilterQuery().getId());
+                    case SINGLEBALANCEQUERY -> {
+                        Balance balance = balances.getBalance(balanceQuery.getSingleBalanceQuery().getId());
                         if (balance != null) {
                             responseObserver.onNext(
                                     BalanceProto.BalanceQueryResult.newBuilder()
-                                            .setBalance(BalanceProto.Balance.newBuilder()
+                                            .setSingleBalanceResult(BalanceProto.SingleBalanceResult.newBuilder()
                                                     .setId(balance.getId())
                                                     .setAmount(balance.getAmount())
                                                     .setPrecision(balance.getPrecision())
                                                     .setActive(balance.isActive())
-                                                    .setCorrelationId(balanceQuery.getBalanceFilterQuery().getCorrelationId())
+                                                    .setCorrelationId(balanceQuery.getSingleBalanceQuery().getCorrelationId())
                                                     .build()
                                             )
                                             .build()
@@ -58,7 +58,7 @@ public class BalanceGrpcQuery extends BalanceQueryServiceGrpc.BalanceQueryServic
                                     .setBaseResult(
                                         BalanceProto.BaseResult.newBuilder()
                                             .setCode(404)
-                                            .setCorrelationId(balanceQuery.getBalanceFilterQuery().getCorrelationId())
+                                            .setCorrelationId(balanceQuery.getSingleBalanceQuery().getCorrelationId())
                                             .build()
                                     )
                                     .build()

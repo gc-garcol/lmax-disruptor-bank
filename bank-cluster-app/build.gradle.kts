@@ -26,10 +26,6 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    // test
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
     // Protobuf
     runtimeOnly("io.grpc:grpc-netty-shaded:${libs.versions.grpcVersion.get()}")
     implementation("io.grpc:grpc-services:${libs.versions.grpcVersion.get()}")
@@ -72,8 +68,4 @@ tasks {
         mainClass.set("gc.garcol.bankcluster.BankClusterApplication")
         jvmArgs("-Dspring.profiles.active=learner")
     }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
