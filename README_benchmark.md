@@ -75,7 +75,7 @@ Req/Bytes counts sampled once per second.
 317k requests in 30.03s, 67.2 MB read
 ```
 
-The results of the test indicate that the `client-app` is capable of handling 10,000 write requests per second.
+The results of the test indicate that the `client-app` is capable of handling 12,000 write requests per second.
 Given the cluster's maximum capacity of 200,000 write requests per second,
-we can achieve this throughput by scaling the `client-app` to 18 instances.
+we can achieve this throughput by scaling the `client-app` to 16 instances.
 This will ensure that we fully utilize the cluster's capacity.
