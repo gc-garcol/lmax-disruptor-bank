@@ -76,8 +76,6 @@ public class Balances {
 
         withdraw(fromId, amount);
         deposit(toId, amount);
-        captureBalance(fromId);
-        captureBalance(toId);
     }
 
     public void putBalance(Balance balance) {
