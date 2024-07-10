@@ -1,4 +1,4 @@
-package gc.garcol.benchmarkcluster.domain.cluster.commands;
+package gc.garcol.benchmarkcluster.infra.cluster.commands;
 
 /**
  * @author thaivc
