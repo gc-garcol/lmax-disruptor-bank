@@ -171,6 +171,11 @@ We use `autocannon` (it can produce more load than `wrk` and `wrk2`).
 
 See [BENCHMARK](./README_benchmark.md) for more details.
 
+## References
+- [How Binance Ledger Powers Your Binance Experience](https://www.binance.com/en/blog/tech/how-binance-ledger-powers-your-binance-experience-5409682424466769892)
+- [The LMAX Architecture](https://martinfowler.com/articles/lmax.html)
+- [LMAX Disruptor: High performance alternative to bounded queues for exchanging data between concurrent threads](https://lmax-exchange.github.io/disruptor/disruptor.html)
+
 ## Archive
 [Change logs](CHANGELOG.md):
 - [v1.0.0](https://github.com/gc-garcol/lmax-disruptor-bank/tree/archive/v0.0.1)
