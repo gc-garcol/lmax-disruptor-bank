@@ -14,7 +14,7 @@ include(
     "bank-cluster-core",
     "bank-cluster-app"
 )
-include("benchmark:aeron-benchmarks-core", "benchmark:benchmark-cluster")
+include("benchmark:benchmark-cluster")
 include(
     "bank-client-core",
     "bank-client-app-user",
