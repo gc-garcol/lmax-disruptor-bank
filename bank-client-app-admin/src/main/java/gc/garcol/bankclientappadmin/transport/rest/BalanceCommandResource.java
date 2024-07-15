@@ -1,9 +1,9 @@
 package gc.garcol.bankclientappadmin.transport.rest;
 
-import gc.garcol.bankclientappadmin.infra.command.CreateBalanceCommand;
-import gc.garcol.bankclientappadmin.infra.command.DepositCommand;
-import gc.garcol.bankclientappadmin.infra.command.TransferCommand;
-import gc.garcol.bankclientappadmin.infra.command.WithdrawCommand;
+import gc.garcol.bankclientappadmin.common.command.CreateBalanceCommand;
+import gc.garcol.bankclientappadmin.common.command.DepositCommand;
+import gc.garcol.bankclientappadmin.common.command.TransferCommand;
+import gc.garcol.bankclientappadmin.common.command.WithdrawCommand;
 import gc.garcol.bankclientcore.cluster.BaseRequest;
 import gc.garcol.bankclientcore.cluster.BaseResponse;
 import gc.garcol.bankclientcore.cluster.RequestBufferDispatcher;

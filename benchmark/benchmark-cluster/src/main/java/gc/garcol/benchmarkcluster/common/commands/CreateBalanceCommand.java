@@ -1,4 +1,4 @@
-package gc.garcol.bankclientappadmin.infra.command;
+package gc.garcol.benchmarkcluster.common.commands;
 
 import lombok.Data;
 

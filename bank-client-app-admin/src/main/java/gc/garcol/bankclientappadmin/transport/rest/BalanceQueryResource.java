@@ -1,6 +1,6 @@
 package gc.garcol.bankclientappadmin.transport.rest;
 
-import gc.garcol.bankclientappadmin.infra.query.BalanceDetailQuery;
+import gc.garcol.bankclientappadmin.common.query.BalanceDetailQuery;
 import gc.garcol.bankclientcore.cluster.BaseRequest;
 import gc.garcol.bankclientcore.cluster.BaseResponse;
 import gc.garcol.bankclientcore.cluster.RequestBufferDispatcher;

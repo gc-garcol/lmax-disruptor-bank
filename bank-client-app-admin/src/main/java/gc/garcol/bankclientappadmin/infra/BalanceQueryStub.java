@@ -2,8 +2,8 @@ package gc.garcol.bankclientappadmin.infra;
 
 import gc.garcol.bank.proto.BalanceProto;
 import gc.garcol.bank.proto.BalanceQueryServiceGrpc;
-import gc.garcol.bankclientappadmin.infra.query.BalanceDetailQuery;
-import gc.garcol.bankclientappadmin.infra.response.BalanceDetailResponse;
+import gc.garcol.bankclientappadmin.common.query.BalanceDetailQuery;
+import gc.garcol.bankclientappadmin.common.response.BalanceDetailResponse;
 import gc.garcol.bankclientcore.cluster.BaseAsyncStub;
 import gc.garcol.bankclientcore.cluster.BaseResponse;
 import gc.garcol.bankclientcore.cluster.RequestBufferEvent;

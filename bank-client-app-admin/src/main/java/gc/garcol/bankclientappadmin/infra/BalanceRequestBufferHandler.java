@@ -1,7 +1,7 @@
 package gc.garcol.bankclientappadmin.infra;
 
-import gc.garcol.bankclientappadmin.infra.command.BalanceCommand;
-import gc.garcol.bankclientappadmin.infra.query.BalanceQuery;
+import gc.garcol.bankclientappadmin.common.command.BalanceCommand;
+import gc.garcol.bankclientappadmin.common.query.BalanceQuery;
 import gc.garcol.bankclientcore.cluster.BaseResponse;
 import gc.garcol.bankclientcore.cluster.RequestBufferEvent;
 import gc.garcol.bankclientcore.cluster.RequestBufferHandler;

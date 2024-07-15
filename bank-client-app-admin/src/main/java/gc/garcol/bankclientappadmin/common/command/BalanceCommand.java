@@ -1,4 +1,4 @@
-package gc.garcol.bankclientappadmin.infra.command;
+package gc.garcol.bankclientappadmin.common.command;
 
 import gc.garcol.bankclientcore.cluster.BaseRequest;
 

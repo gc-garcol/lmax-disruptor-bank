@@ -2,7 +2,7 @@ package gc.garcol.benchmarkcluster.infra.cluster;
 
 import gc.garcol.bank.proto.BalanceCommandServiceGrpc;
 import gc.garcol.bank.proto.BalanceProto;
-import gc.garcol.benchmarkcluster.infra.cluster.commands.*;
+import gc.garcol.benchmarkcluster.common.commands.*;
 import gc.garcol.benchmarkcluster.transport.rest.BaseResponse;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;

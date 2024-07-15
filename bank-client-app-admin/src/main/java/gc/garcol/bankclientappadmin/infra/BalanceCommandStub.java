@@ -2,10 +2,10 @@ package gc.garcol.bankclientappadmin.infra;
 
 import gc.garcol.bank.proto.BalanceCommandServiceGrpc;
 import gc.garcol.bank.proto.BalanceProto;
-import gc.garcol.bankclientappadmin.infra.command.CreateBalanceCommand;
-import gc.garcol.bankclientappadmin.infra.command.DepositCommand;
-import gc.garcol.bankclientappadmin.infra.command.TransferCommand;
-import gc.garcol.bankclientappadmin.infra.command.WithdrawCommand;
+import gc.garcol.bankclientappadmin.common.command.CreateBalanceCommand;
+import gc.garcol.bankclientappadmin.common.command.DepositCommand;
+import gc.garcol.bankclientappadmin.common.command.TransferCommand;
+import gc.garcol.bankclientappadmin.common.command.WithdrawCommand;
 import gc.garcol.bankclientcore.cluster.BaseAsyncStub;
 import gc.garcol.bankclientcore.cluster.BaseResponse;
 import gc.garcol.bankclientcore.cluster.RequestBufferEvent;

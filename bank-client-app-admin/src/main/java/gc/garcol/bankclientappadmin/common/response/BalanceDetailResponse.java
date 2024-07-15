@@ -1,4 +1,4 @@
-package gc.garcol.bankclientappadmin.infra.response;
+package gc.garcol.bankclientappadmin.common.response;
 
 import gc.garcol.bankclientcore.cluster.BaseResponse;
 import lombok.*;
