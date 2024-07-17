@@ -52,14 +52,14 @@ public class BalanceGrpcCommand extends BalanceCommandServiceGrpc.BalanceCommand
 
             @Override
             public void onError(Throwable throwable) {
-                log.error("on command streaming error", throwable);
+                log.error("{} on command streaming error {}", replyChannel, throwable.getMessage());
                 simpleReplier.repliers.remove(replyChannel);
                 responseObserver.onError(throwable);
             }
 
             @Override
             public void onCompleted() {
-                log.info("on completed command streaming");
+                log.info("{} on completed command streaming", replyChannel);
                 simpleReplier.repliers.remove(replyChannel);
                 responseObserver.onCompleted();
             }

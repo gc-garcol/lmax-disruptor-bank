@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -21,7 +23,7 @@ import java.util.concurrent.ExecutionException;
 @RestController
 @RequestMapping("/api/balance-benchmark")
 public class BalanceCommandBenchmarkResource {
-    private final int MAX_CONNECTIONS = 100;
+    private final int MAX_CONNECTIONS = 200;
     private BalanceCommandStub[] balanceCommandStubs;
     private int connections = 1;
 
@@ -40,29 +42,46 @@ public class BalanceCommandBenchmarkResource {
 
         this.connections = connections;
 
-        run(10_000);
-        run(loop / 2);
-        run(loop);
-        run(loop);
-        run(loop);
+        run(10_000, true);
+        run(loop / 2, true);
+        run(loop, true);
+        run(loop, true);
+        run(loop, true);
         var start = System.currentTimeMillis();
-        run(loop);
+        run(loop, false);
         var end = System.currentTimeMillis();
         var executionTime = end - start;
         var throughput = (double) loop / (executionTime * 1.0 / 1000);
+
+        List<Long> latencies = new ArrayList<>();
+        for (int connection = 0; connection < connections; connection++) {
+            var subLatencies = balanceCommandStubs[connection].replyFutures.values()
+                .stream().map(reply -> reply.getEndTime() - reply.getStartTime())
+                .toList();
+            latencies.addAll(subLatencies);
+            balanceCommandStubs[connection].replyFutures.clear();
+        }
+
+        latencies.sort(Long::compare);
 
         var result =
             String.format("Start time: %d ms%n%n", start) +
             String.format("End time: %d ms%n%n", end) +
             String.format("Execution time: %d ms%n%n", executionTime) +
             String.format("Throughput: %.2f ops/s%n%n", throughput) +
+            "Latencies: \n" +
+            String.format("p10 = %.2f ms %n", latencies.get((int) Math.round(latencies.size() * 0.10)) * 1.0 / 1_000_000) +
+            String.format("p25 = %.2f ms %n", latencies.get((int) Math.round(latencies.size() * 0.25)) * 1.0 / 1_000_000) +
+            String.format("p50 = %.2f ms %n", latencies.get((int) Math.round(latencies.size() * 0.5)) * 1.0 / 1_000_000) +
+            String.format("p75 = %.2f ms %n", latencies.get((int) Math.round(latencies.size() * 0.75)) * 1.0 / 1_000_000) +
+            String.format("p99 = %.2f ms %n%n", latencies.get((int) Math.round(latencies.size() * 0.99)) * 1.0 / 1_000_000) +
             "Result: Completed " + loop + " operations in " + executionTime + " ms";
         System.out.println(result);
         return result;
     }
 
     @SneakyThrows
-    private void run(int loop) {
+    private void run(int loop, boolean clean) {
         Thread[] threads = new Thread[connections];
         for (int connection = 0; connection < connections; connection++) {
             int connectionIdx = connection;
@@ -83,6 +102,9 @@ public class BalanceCommandBenchmarkResource {
         }
         for (int connection = 0; connection < connections; connection++) {
             threads[connection].join();
+            if (clean) {
+                balanceCommandStubs[connection].replyFutures.clear();
+            }
         }
     }
 }
