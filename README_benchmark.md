@@ -1,5 +1,16 @@
 # BENCHMARK
 
+## Using jmh for benchmarking the `leader` node
+
+Start leader
+```shell
+make run-leader
+```
+Benchmark
+```shell
+./gradlew jmh
+```
+
 ## Using simple code for benchmarking the `leader` node
 We open only one grpc connection from the benchmark tool to the `leader` node.
 (In real-world, one client-app must open only one connection to the `leader` node.)
