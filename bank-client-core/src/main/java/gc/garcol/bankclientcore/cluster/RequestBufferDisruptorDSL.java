@@ -21,7 +21,7 @@ public class RequestBufferDisruptorDSL implements DisruptorDSL<RequestBufferEven
             RequestBufferEvent::new,
             bufferSize,
             DaemonThreadFactory.INSTANCE,
-            ProducerType.SINGLE,
+            ProducerType.MULTI,
             waitStrategy
         );
         disruptor.handleEventsWith(requestBufferHandler);

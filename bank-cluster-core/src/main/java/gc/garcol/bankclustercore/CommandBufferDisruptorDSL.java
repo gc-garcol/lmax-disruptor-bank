@@ -11,18 +11,20 @@ import lombok.RequiredArgsConstructor;
  * @since 2024
  */
 @RequiredArgsConstructor
-public class CommandBufferDisruptorDSL implements DisruptorDSL<CommandBufferEvent> {
+public class CommandBufferDisruptorDSL implements DisruptorDSL<CommandBufferEvent>
+{
     private final CommandBufferJournaler commandBufferJournaler;
     private final CommandBufferHandler commandBufferHandler;
     private final CommandBufferReply commandBufferReply;
 
     @Override
-    public Disruptor<CommandBufferEvent> build(int bufferSize, WaitStrategy waitStrategy) {
+    public Disruptor<CommandBufferEvent> build(int bufferSize, WaitStrategy waitStrategy)
+    {
         var disruptor = new Disruptor<>(
             CommandBufferEvent::new,
             bufferSize,
             DaemonThreadFactory.INSTANCE,
-            ProducerType.SINGLE,
+            ProducerType.MULTI,
             waitStrategy
         );
         disruptor.handleEventsWith(commandBufferJournaler)
